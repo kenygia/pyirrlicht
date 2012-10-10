@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Maxim Kolosov 2010-2011 maxkolosov@inbox.ru
+// http://pir.sourceforge.net
 // BSD license
 
 #ifdef __cplusplus
@@ -329,13 +329,18 @@ IRRLICHT_C_API dimension2du* IVideoDriver_getMaxTextureSize(IVideoDriver* pointe
 {return &pointer->getMaxTextureSize();}
 
 #ifdef _MSC_VER
+#ifdef UNICODE
+const wchar_t* window_caption = L"CIrrDeviceWin32";
+#else
+const char* window_caption = L"CIrrDeviceWin32";
+#endif
 IRRLICHT_C_API void* IVideoDriver_GetHandle(IVideoDriver* pointer)
 {
 	switch(pointer->getDriverType())
 	{
 	case EDT_NULL: return GetStdHandle(STD_OUTPUT_HANDLE);
-	case EDT_SOFTWARE: return FindWindow("CIrrDeviceWin32", 0);
-	case EDT_BURNINGSVIDEO: return FindWindow("CIrrDeviceWin32", 0);
+	case EDT_SOFTWARE: return FindWindow(window_caption, 0);
+	case EDT_BURNINGSVIDEO: return FindWindow(window_caption, 0);
 	case EDT_DIRECT3D8: return pointer->getExposedVideoData().D3D8.HWnd;
 	case EDT_DIRECT3D9: return pointer->getExposedVideoData().D3D9.HWnd;
 	case EDT_OPENGL: return pointer->getExposedVideoData().OpenGLWin32.HWnd;
@@ -371,22 +376,22 @@ IRRLICHT_C_API void IVideoDriver_SetIcon(IVideoDriver* pointer, int icon_id = 32
 }
 // floating point analogs for 2d drawing
 IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f1(IVideoDriver* pointer, SColor* color, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2)
-{pointer->draw2DRectangle(*color, core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2));}
+{pointer->draw2DRectangle(*color, core::rect<s32>(s32(pos_x1), s32(pos_y1), s32(pos_x2), s32(pos_y2)));}
 IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f2(IVideoDriver* pointer, SColor* color, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2, f32 clip_x1, f32 clip_y1, f32 clip_x2, f32 clip_y2)
-{pointer->draw2DRectangle(*color, core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2), &core::rect<s32>(clip_x1, clip_y1, clip_x2, clip_y2));}
+{pointer->draw2DRectangle(*color, core::rect<s32>(s32(pos_x1), s32(pos_y1), s32(pos_x2), s32(pos_y2)), &core::rect<s32>(s32(clip_x1), s32(clip_y1), s32(clip_x2), s32(clip_y2)));}
 IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f3(IVideoDriver* pointer, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2, const SColor* colorLeftUp, const SColor* colorRightUp, const SColor* colorLeftDown, const SColor* colorRightDown)
-{pointer->draw2DRectangle(core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2), *colorLeftUp, *colorRightUp, *colorLeftDown, *colorRightDown);}
+{pointer->draw2DRectangle(core::rect<s32>(s32(pos_x1), s32(pos_y1), s32(pos_x2), s32(pos_y2)), *colorLeftUp, *colorRightUp, *colorLeftDown, *colorRightDown);}
 IRRLICHT_C_API void IVideoDriver_draw2DRectangle_f4(IVideoDriver* pointer, f32 pos_x1, f32 pos_y1, f32 pos_x2, f32 pos_y2, const SColor* colorLeftUp, const SColor* colorRightUp, const SColor* colorLeftDown, const SColor* colorRightDown, f32 clip_x1, f32 clip_y1, f32 clip_x2, f32 clip_y2)
-{pointer->draw2DRectangle(core::rect<s32>(pos_x1, pos_y1, pos_x2, pos_y2), *colorLeftUp, *colorRightUp, *colorLeftDown, *colorRightDown, &core::rect<s32>(clip_x1, clip_y1, clip_x2, clip_y2));}
+{pointer->draw2DRectangle(core::rect<s32>(s32(pos_x1), s32(pos_y1), s32(pos_x2), s32(pos_y2)), *colorLeftUp, *colorRightUp, *colorLeftDown, *colorRightDown, &core::rect<s32>(s32(clip_x1), s32(clip_y1), s32(clip_x2), s32(clip_y2)));}
 
 IRRLICHT_C_API void IVideoDriver_draw2DRectangleOutline_f(IVideoDriver* pointer, f32 x1, f32 y1, f32 x2, f32 y2, const SColor& color = SColor(255,255,255,255))
-{pointer->draw2DRectangleOutline(recti(x1, y1, x2, y2), color);}
+{pointer->draw2DRectangleOutline(rect<s32>(s32(x1), s32(y1), s32(x2), s32(y2)), color);}
 IRRLICHT_C_API void IVideoDriver_draw2DLine_f(IVideoDriver* pointer, f32 start_x, f32 start_y, f32 end_x, f32 end_y, const SColor& color = SColor(255,255,255,255))
-{pointer->draw2DLine(core::position2d<s32>(start_x, start_y), core::position2d<s32>(end_x, end_y), color);}
+{pointer->draw2DLine(core::position2d<s32>(s32(start_x), s32(start_y)), core::position2d<s32>(s32(end_x), s32(end_y)), color);}
 IRRLICHT_C_API void IVideoDriver_drawPixel_f(IVideoDriver* pointer, f32 x, f32 y, const SColor* color)
-{pointer->drawPixel(x, y, *color);}
+{pointer->drawPixel(u32(x), u32(y), *color);}
 IRRLICHT_C_API void IVideoDriver_draw2DPolygon_f(IVideoDriver* pointer, f32 center_x, f32 center_y, f32 radius, const SColor& color = SColor(100,255,255,255), s32 vertexCount = 10)
-{pointer->draw2DPolygon(core::position2d<s32>(center_x, center_y), radius, color, vertexCount);}
+{pointer->draw2DPolygon(core::position2d<s32>(s32(center_x), s32(center_y)), radius, color, vertexCount);}
 
 IRRLICHT_C_API void IVideoDriver_draw2DLineW(IVideoDriver* pointer, const core::position2d<s32>* start, const core::position2d<s32>* end, const SColor& color = SColor(255,255,255,255), s32 width = 0)
 {
@@ -412,20 +417,20 @@ IRRLICHT_C_API void IVideoDriver_draw2DLineW(IVideoDriver* pointer, const core::
 IRRLICHT_C_API void IVideoDriver_draw2DLineWf(IVideoDriver* pointer, f32 x1, f32 y1, f32 x2, f32 y2, const SColor& color = SColor(255,255,255,255), s32 width = 0)
 {
 	if (width < 2)
-		pointer->draw2DLine(core::position2d<s32>(x1, y1), core::position2d<s32>(x2, y2), color);
+		pointer->draw2DLine(core::position2d<s32>(s32(x1), s32(y1)), core::position2d<s32>(s32(x2), s32(y2)), color);
 	else
 	{
 		if (width%2)//3>
 		{
 			s32 count = (width-1)/2;
 			for(s32 i = -count; i <= count; i++)
-				pointer->draw2DLine(core::position2d<s32>(x1+i, y1+i), core::position2d<s32>(x2+i, y2+i), color);
+				pointer->draw2DLine(core::position2d<s32>(s32(x1)+i, s32(y1)+i), core::position2d<s32>(s32(x2)+i, s32(y2)+i), color);
 		}
 		else//2>
 		{
 			s32 count = width/2;
 			for(s32 i = -count; i < count; i++)
-				pointer->draw2DLine(core::position2d<s32>(x1+i, y1+i), core::position2d<s32>(x2+i, y2+i), color);
+				pointer->draw2DLine(core::position2d<s32>(s32(x1)+i, s32(y1)+i), core::position2d<s32>(s32(x2)+i, s32(y2)+i), color);
 		}
 	}
 }

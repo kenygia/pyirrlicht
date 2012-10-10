@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Maxim Kolosov 2010-2011 maxkolosov@inbox.ru
+// http://pir.sourceforge.net
 // BSD license
 
 #ifdef __cplusplus
@@ -53,6 +53,9 @@ IRRLICHT_C_API ILogger* IrrlichtDevice_getLogger(IrrlichtDevice* pointer){return
 IRRLICHT_C_API IVideoModeList* IrrlichtDevice_getVideoModeList(IrrlichtDevice* pointer){return pointer->getVideoModeList();}
 IRRLICHT_C_API IOSOperator* IrrlichtDevice_getOSOperator(IrrlichtDevice* pointer){return pointer->getOSOperator();}
 IRRLICHT_C_API ITimer* IrrlichtDevice_getTimer(IrrlichtDevice* pointer){return pointer->getTimer();}
+IRRLICHT_C_API IRandomizer* IrrlichtDevice_getRandomizer(IrrlichtDevice* pointer){return pointer->getRandomizer();}
+IRRLICHT_C_API void IrrlichtDevice_setRandomizer(IrrlichtDevice* pointer, IRandomizer* r){pointer->setRandomizer(r);}
+IRRLICHT_C_API IRandomizer* IrrlichtDevice_createDefaultRandomizer(IrrlichtDevice* pointer){return pointer->createDefaultRandomizer();}
 IRRLICHT_C_API void IrrlichtDevice_setWindowCaption(IrrlichtDevice* pointer, const wchar_t* text){pointer->setWindowCaption(text);}
 IRRLICHT_C_API bool IrrlichtDevice_isWindowActive(IrrlichtDevice* pointer){return pointer->isWindowActive();}
 IRRLICHT_C_API bool IrrlichtDevice_isWindowFocused(IrrlichtDevice* pointer){return pointer->isWindowFocused();}
@@ -72,6 +75,7 @@ IRRLICHT_C_API void IrrlichtDevice_restoreWindow(IrrlichtDevice* pointer){pointe
 IRRLICHT_C_API bool IrrlichtDevice_activateJoysticks(IrrlichtDevice* pointer, core::array<SJoystickInfo>& joystickInfo){return pointer->activateJoysticks(joystickInfo);}
 IRRLICHT_C_API bool IrrlichtDevice_setGammaRamp(IrrlichtDevice* pointer, f32 red, f32 green, f32 blue, f32 relativebrightness, f32 relativecontrast){return pointer->setGammaRamp(red, green, blue, relativebrightness, relativecontrast);}
 IRRLICHT_C_API bool IrrlichtDevice_getGammaRamp(IrrlichtDevice* pointer, f32 &red, f32 &green, f32 &blue, f32 &brightness, f32 &contrast){return pointer->getGammaRamp(red, green, blue, brightness, contrast);}
+IRRLICHT_C_API void IrrlichtDevice_clearSystemMessages(IrrlichtDevice* pointer){pointer->clearSystemMessages();}
 IRRLICHT_C_API E_DEVICE_TYPE IrrlichtDevice_getType(IrrlichtDevice* pointer){return pointer->getType();}
 IRRLICHT_C_API bool IrrlichtDevice_isDriverSupported(IrrlichtDevice* pointer, video::E_DRIVER_TYPE driver){return pointer->isDriverSupported(driver);}
 

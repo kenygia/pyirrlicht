@@ -500,6 +500,7 @@ class game:
 			animation_scale_step = 0.01
 
 			screen_size = vector2du(self.video_driver.getScreenSize())
+			rotation_angle = 45.0 * 3.14 / 360.0
 			while self.device.run():
 				if self.device.isWindowActive():
 					if i_event_receiver.IsKeyDown(KEY_ESCAPE):
@@ -516,7 +517,7 @@ class game:
 						if animation_flag and self.device.getTimer().getTime()/animation_time_step%2:
 							svg_file_name = tex.getName()
 							self.video_driver.removeTexture(tex)
-							tex = self.create_texture_from_svg_image(svg_file_name, animation_scale)
+							tex = self.create_texture_from_svg_image(svg_file_name, animation_scale, rotation_angle)
 							tex_size = tex.getOriginalSize()
 							animation_scale -= animation_scale_step
 						if tex:
@@ -601,8 +602,10 @@ class game:
 			print('=== NOT EXISTS TEXTURES')
 			return None, dimension2du(100, 100), ''
 
-	def create_texture_from_svg_image(self, svg_file_name = '', scale = 1.0):
+	def create_texture_from_svg_image(self, svg_file_name = '', scale = 1.0, angle = 0):
 		if self.svg_image:
+			if angle:
+				self.svg_image.rotate_around_center(angle)
 			screen_size = self.video_driver.getScreenSize()
 			svg_size = self.svg_image.get_size()
 			dx = float(screen_size.X) / float(svg_size.X)

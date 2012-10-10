@@ -6,6 +6,8 @@
 
 #define _IRR_STATIC_LIB_
 
+//#define _IRR_WCHAR_FILESYSTEM// this flag must be first checked in IrrCompileConfig.h header file, and NO_IRR_WCHAR_FILESYSTEM unchecked
+
 #define _COMPILE_WITH_2DTTFONT_
 
 #define _COMPILE_WITH_3D_TEXT_
@@ -139,6 +141,7 @@ using namespace quake3;
 #include "_IParticleSystemSceneNode.h"
 #include "_IQ3LevelMesh.h"
 #include "_IQ3Shader.h"
+#include "_IRandomizer.h"
 #include "_IReadFile.h"
 #include "_IReferenceCounted.h"
 #include "_ISceneCollisionManager.h"
@@ -184,6 +187,11 @@ using namespace quake3;
 #ifdef _COMPILE_WITH_3D_TEXT_
 #include "text3d.h"
 #endif
+
+inline irr::core::stringw trim_left(const irr::core::stringw value, irr::s32 length = 0)
+{
+	return value.subString(length, value.size() - length);
+}
 
 inline core::array<double> string_split_d(const wchar_t* str, u32 size = 8, const wchar_t* delimiter = L",")
 {
@@ -281,9 +289,11 @@ IRRLICHT_C_API bool BUILD_WITH_STREAM_FUNCTIONS = false;
 #endif
 
 #if defined(_IRR_WCHAR_FILESYSTEM)
-	IRRLICHT_C_API bool IRR_WCHAR_FILESYSTEM = true;
+#define UNICODE
+#define _UNICODE
+IRRLICHT_C_API bool IRR_WCHAR_FILESYSTEM = true;
 #else
-	IRRLICHT_C_API bool IRR_WCHAR_FILESYSTEM = false;
+IRRLICHT_C_API bool IRR_WCHAR_FILESYSTEM = false;
 #endif
 
 IRRLICHT_C_API E_FILE_ARCHIVE_TYPE _EFAT_ZIP = EFAT_ZIP;

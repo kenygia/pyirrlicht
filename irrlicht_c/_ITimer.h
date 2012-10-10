@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Maxim Kolosov 2010-2011 maxkolosov@inbox.ru
+// http://pir.sourceforge.net
 // BSD license
 
 #ifdef __cplusplus
@@ -10,6 +10,10 @@ extern "C" {
 //IRRLICHT_C_API void ITimer_Destructor(ITimer* pointer){delete pointer;}
 IRRLICHT_C_API u32 ITimer_getRealTime(ITimer* pointer)
 {return pointer->getRealTime();}
+#if (IRRLICHT_VERSION_MAJOR == 1 && IRRLICHT_VERSION_MINOR > 7)
+IRRLICHT_C_API ITimer::RealTimeDate* ITimer_getRealTimeAndDate(ITimer* pointer)
+{return &pointer->getRealTimeAndDate();}
+#endif
 IRRLICHT_C_API u32 ITimer_getTime(ITimer* pointer)
 {return pointer->getTime();}
 IRRLICHT_C_API void ITimer_setTime(ITimer* pointer, u32 time)

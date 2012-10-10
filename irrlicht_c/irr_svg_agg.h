@@ -254,7 +254,7 @@ public:
 									parse_attributes(xml_reader);
 									parse_transform(xml_reader->getAttributeValue(L"transform"));
 									_path_renderer_.move_to(_wtof(list_attr[0].c_str()), _wtof(list_attr[1].c_str()));
-									for (int i = 2; i < points_count; i += 2)
+									for (u32 i = 2; i < points_count; i += 2)
 										_path_renderer_.line_to(_wtof(list_attr[i].c_str()), _wtof(list_attr[i+1].c_str()));
 									_path_renderer_.close_subpath();
 									_path_renderer_.end_path();
@@ -275,7 +275,7 @@ public:
 									parse_attributes(xml_reader);
 									parse_transform(xml_reader->getAttributeValue(L"transform"));
 									_path_renderer_.move_to(_wtof(list_attr[0].c_str()), _wtof(list_attr[1].c_str()));
-									for (int i = 2; i < points_count; i += 2)
+									for (u32 i = 2; i < points_count; i += 2)
 										_path_renderer_.line_to(_wtof(list_attr[i].c_str()), _wtof(list_attr[i+1].c_str()));
 									_path_renderer_.end_path();
 								}
@@ -477,7 +477,7 @@ public:
 	{
 		core::array<core::stringw> list_attr;
 		core::stringw(value).trim().split(list_attr, L";");
-		for (int i = 0; i < list_attr.size(); i++)
+		for (u32 i = 0; i < list_attr.size(); i++)
 		{
 			if (list_attr[i].equalsn(L"fill:", 5))
 			{
@@ -691,6 +691,19 @@ public:
 		if (!cmds.empty())
 			cmds.clear();
 	}
+	void rotate(double a = 0.01)
+	{
+		_trans_affine_.rotate(a);
+		//_trans_affine_ *= agg::trans_affine_rotation(a);
+	}
+	void rotate_around_center(double a = 0.01)
+	{
+		double x = _width_ / 2;
+		double y = _height_ / 2;
+		_trans_affine_.translate(-x, -y);
+		_trans_affine_.rotate(a);
+		_trans_affine_.translate(x, y);
+	}
 	void scale(double x = 1.0, double y = 1.0)
 	{
 		_scale_x_ = x;
@@ -702,7 +715,8 @@ public:
 			_scale_y_ = 1.0;
 		_height_ *= _scale_y_;
 		if (_scale_x_ > 0.0 || _scale_y_ > 0.0)
-			_trans_affine_ *= agg::trans_affine_scaling(_scale_x_, _scale_y_);
+			_trans_affine_.scale(_scale_x_, _scale_y_);
+			//_trans_affine_ *= agg::trans_affine_scaling(_scale_x_, _scale_y_);
 	}
 	void scale_rateably(double scale_value = 1.0)
 	{
@@ -712,7 +726,8 @@ public:
 		_width_ *= _scale_;
 		_height_ *= _scale_;
 		if (_scale_ > 0.0)
-			_trans_affine_ *= agg::trans_affine_scaling(_scale_);
+			_trans_affine_.scale(_scale_);
+			//_trans_affine_ *= agg::trans_affine_scaling(_scale_);
 	}
 	//IImage* render_old()
 	//{
@@ -796,12 +811,34 @@ public:
 		}
 		data.clear();
 	}
+	IImage* get_image_pointer()
+	{
+		return _image_;
+	}
+	ITexture* get_texture_pointer()
+	{
+		return _texture_;
+	}
+	void delete_image()
+	{
+		if (_image_ && _image_->getReferenceCount())
+			_image_->drop();
+	}
+	void delete_texture()
+	{
+		if (_texture_)
+		{
+			_video_driver_->removeTexture(_texture_);
+			// texture created with addTexture and can not be dropped
+			//if (_texture_->getReferenceCount())
+			//	_texture_->drop();
+		}
+	}
 	IImage* get_image(bool rendering = false)
 	{
 		if (rendering)
 		{
-			if (_image_)
-				_image_->drop();
+			delete_image();
 			render();
 		}
 		else
@@ -891,51 +928,29 @@ private:
 extern "C" {
 #endif
 
-IRRLICHT_C_API svg_agg_image* svg_agg_image_ctor1(IVideoDriver* video_driver, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
-{
-//#ifdef _MSC_VER
-//	try
-//	{
-//		return new svg_agg_image(video_driver, fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);
-//	}
-//	catch(...)
-//	{
-//#if defined(_IRR_WCHAR_FILESYSTEM)
-//		wprintf(L"ERROR parse file %s\n", file_name);
-//		throw;
-//#else
-//		//printf("ERROR parse file %s\n", file_name);
-//		throw exception("ERROR parse file %s\n", file_name);
-//#endif
-//		return 0;
-//	}
-//#else
-	return new svg_agg_image(video_driver, fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);
-//#endif
-}
-IRRLICHT_C_API void svg_agg_image_parse(svg_agg_image* pointer, IFileSystem* fs, const fschar_t* file_name = "tiger.svg", bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
+IRRLICHT_C_API svg_agg_image* svg_agg_image_ctor1(IVideoDriver* video_driver, IFileSystem* fs, const fschar_t* file_name, bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
+{return new svg_agg_image(video_driver, fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);}
+IRRLICHT_C_API void svg_agg_image_parse(svg_agg_image* pointer, IFileSystem* fs, const fschar_t* file_name, bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
 {pointer->parse(fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);}
 
-IRRLICHT_C_API void svg_agg_image_scale(svg_agg_image* pointer, double x = 1.0, double y = 1.0)
-{pointer->scale(x, y);}
-IRRLICHT_C_API void svg_agg_image_scale_rateably(svg_agg_image* pointer, double scale_value = 1.0)
-{pointer->scale_rateably(scale_value);}
+IRRLICHT_C_API void svg_agg_image_rotate(svg_agg_image* pointer, double a = 0.01){pointer->rotate(a);}
+IRRLICHT_C_API void svg_agg_image_rotate_around_center(svg_agg_image* pointer, double a = 0.01){pointer->rotate_around_center(a);}
+IRRLICHT_C_API void svg_agg_image_scale(svg_agg_image* pointer, double x = 1.0, double y = 1.0){pointer->scale(x, y);}
+IRRLICHT_C_API void svg_agg_image_scale_rateably(svg_agg_image* pointer, double scale_value = 1.0){pointer->scale_rateably(scale_value);}
 
-IRRLICHT_C_API IImage* svg_agg_image_get_image(svg_agg_image* pointer, bool rendering = false)
-{return pointer->get_image(rendering);}
-IRRLICHT_C_API ITexture* svg_agg_image_get_texture(svg_agg_image* pointer, bool rendering = false, bool adding = false)
-{return pointer->get_texture(rendering, adding);}
+IRRLICHT_C_API IImage* svg_agg_image_get_image_pointer(svg_agg_image* pointer){return pointer->get_image_pointer();}
+IRRLICHT_C_API IImage* svg_agg_image_get_image(svg_agg_image* pointer, bool rendering = false){return pointer->get_image(rendering);}
+IRRLICHT_C_API void svg_agg_image_delete_image(svg_agg_image* pointer){pointer->delete_image();}
 
-//IRRLICHT_C_API vector2d<u32>* svg_agg_image_get_size(svg_agg_image* pointer)
-//{return pointer->get_size();}
-IRRLICHT_C_API double svg_agg_image_get_width(svg_agg_image* pointer)
-{return pointer->get_width();}
-IRRLICHT_C_API u32 svg_agg_image_get_width_u32(svg_agg_image* pointer)
-{return pointer->get_width_u32();}
-IRRLICHT_C_API double svg_agg_image_get_height(svg_agg_image* pointer)
-{return pointer->get_height();}
-IRRLICHT_C_API u32 svg_agg_image_get_height_u32(svg_agg_image* pointer)
-{return pointer->get_height_u32();}
+IRRLICHT_C_API ITexture* svg_agg_image_get_texture_pointer(svg_agg_image* pointer){return pointer->get_texture_pointer();}
+IRRLICHT_C_API ITexture* svg_agg_image_get_texture(svg_agg_image* pointer, bool rendering = false, bool adding = false){return pointer->get_texture(rendering, adding);}
+IRRLICHT_C_API void svg_agg_image_delete_texture(svg_agg_image* pointer){pointer->delete_texture();}
+
+//IRRLICHT_C_API vector2d<u32>* svg_agg_image_get_size(svg_agg_image* pointer){return pointer->get_size();}
+IRRLICHT_C_API double svg_agg_image_get_width(svg_agg_image* pointer){return pointer->get_width();}
+IRRLICHT_C_API u32 svg_agg_image_get_width_u32(svg_agg_image* pointer){return pointer->get_width_u32();}
+IRRLICHT_C_API double svg_agg_image_get_height(svg_agg_image* pointer){return pointer->get_height();}
+IRRLICHT_C_API u32 svg_agg_image_get_height_u32(svg_agg_image* pointer){return pointer->get_height_u32();}
 
 #ifdef __cplusplus
 }

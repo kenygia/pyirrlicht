@@ -320,14 +320,22 @@ void CGUIFileSelector::init(const wchar_t* title)
 
 #ifdef _IRR_WINDOWS_
 	enum { SZ = 1024, GB = 1024*1024*1024 } ;
+#ifdef UNICODE
+	wchar_t drives[SZ] ;
+	wchar_t* p = drives;
+#else
 	char drives[SZ] ;
-
+	char* p = drives;
+#endif
 	if (GetLogicalDriveStrings( SZ, drives ) < SZ)
 	{
-		char* p = drives;
 		while(*p)// two null chars; end of list
 		{
+#ifdef UNICODE
+			DriveBox->addItem(p);
+#else
 			DriveBox->addItem(returnMultiByte_FromString(p));
+#endif
 			while(*p)
 				++p ; // get to next null char
 			++p ; // and then skip over it

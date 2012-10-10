@@ -52,10 +52,10 @@ inline int __cdecl cmp_color_cairo(const void* p1, const void* p2)
 	return wcscmp(((cairo_named_color*)p1)->name, ((cairo_named_color*)p2)->name);
 }
 
-inline stringw trim_left(const stringw value, s32 length = 0)
-{
-	return value.subString(length, value.size() - length);
-}
+//inline stringw trim_left(const stringw value, s32 length = 0)
+//{
+//	return value.subString(length, value.size() - length);
+//}
 
 
 class svg_cairo_image

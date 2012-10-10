@@ -1,4 +1,4 @@
-// Copyright(c) Max Kolosov 2010-2012 pyirrlicht@gmail.com
+// Copyright(c) Maxim Kolosov 2010-2012 pyirrlicht@gmail.com
 // http://pir.sourceforge.net
 // BSD license
 

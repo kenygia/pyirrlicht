@@ -1,5 +1,5 @@
-// Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-// http://vosolok2008.narod.ru
+// Copyright(c) Maxim Kolosov 2010-2011 maxkolosov@inbox.ru
+// http://pir.sourceforge.net
 // BSD license
 
 //class IGUIWindow : public IGUIElement

@@ -2,8 +2,8 @@
 # http://pir.sourceforge.net
 # BSD license
 
-__version__ = pyirrlicht_version = '1.1.2'
-__versionTime__ = '2012-09-20'
+__version__ = pyirrlicht_version = '1.1.3'
+__versionTime__ = '2012-10-08'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -1376,11 +1376,17 @@ BUILD_WITH_IRR_SVG_AGG = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_IRR_SVG_AGG'
 if BUILD_WITH_IRR_SVG_AGG:
 	svg_agg_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_ctor1', c_module))
 	svg_agg_image_parse = func_type(None, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_parse', c_module))
+	svg_agg_image_rotate = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_rotate', c_module))
+	svg_agg_image_rotate_around_center = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_rotate_around_center', c_module))
 	svg_agg_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double, ctypes.c_double)(('svg_agg_image_scale', c_module))
 	svg_agg_image_scale_rateably = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_scale_rateably', c_module))
 	#~ svg_agg_image_render = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_render', c_module))
+	svg_agg_image_get_image_pointer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_image_pointer', c_module))
 	svg_agg_image_get_image = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('svg_agg_image_get_image', c_module))
+	svg_agg_image_delete_image = func_type(None, ctypes.c_void_p)(('svg_agg_image_delete_image', c_module))
+	svg_agg_image_get_texture_pointer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_texture_pointer', c_module))
 	svg_agg_image_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool)(('svg_agg_image_get_texture', c_module))
+	svg_agg_image_delete_texture = func_type(None, ctypes.c_void_p)(('svg_agg_image_delete_texture', c_module))
 	#~ svg_agg_image_drop = func_type(ctypes.c_bool, ctypes.c_void_p)(('svg_agg_image_drop', c_module))
 	#~ svg_agg_image_get_size = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_size', c_module))
 	svg_agg_image_get_width = func_type(ctypes.c_double, ctypes.c_void_p)(('svg_agg_image_get_width', c_module))
@@ -4980,9 +4986,6 @@ if BUILD_WITH_3D_TEXT:
 	DAF_CYLINDER = 3#DRAW AS CYLINDERS
 	DAF_MIXED = 4#DRAW AS FIGURES WITH PRIMITIVES
 
-	IText3DSimple_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IText3DSimple_ctor', c_module))
-	IText3DSimple_setText = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_wchar_p, fschar_t, ctypes.c_uint, ctypes.c_float, ctypes.c_int, ctypes.c_int)(('IText3DSimple_setText', c_module))
-
 	IText3D_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IText3D_ctor', c_module))
 	IText3D_setText = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_wchar_p, fschar_t, ctypes.c_uint, ctypes.c_float, ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_int)(('IText3D_setText', c_module))
 	IText3D_get_color_random_type = func_type(ctypes.c_int, ctypes.c_void_p)(('IText3D_get_color_random_type', c_module))
@@ -4990,6 +4993,12 @@ if BUILD_WITH_3D_TEXT:
 	IText3D_set_auto_emissive_color = func_type(None, ctypes.c_void_p)(('IText3D_set_auto_emissive_color', c_module))
 	IText3D_get_draw_as_figures = func_type(ctypes.c_int, ctypes.c_void_p)(('IText3D_get_draw_as_figures', c_module))
 	IText3D_set_draw_as_figures = func_type(None, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p)(('IText3D_set_draw_as_figures', c_module))
+
+	IText3DSimple_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IText3DSimple_ctor', c_module))
+	IText3DSimple_setText = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_wchar_p, fschar_t, ctypes.c_uint, ctypes.c_float, ctypes.c_int, ctypes.c_int)(('IText3DSimple_setText', c_module))
+
+	IText3DPlane_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('IText3DPlane_ctor', c_module))
+	IText3DPlane_setText = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_wchar_p, fschar_t, ctypes.c_uint, ctypes.c_float, ctypes.c_int, ctypes.c_int)(('IText3DPlane_setText', c_module))
 
 
 # ============== Python classes
@@ -14889,7 +14898,7 @@ if BUILD_WITH_IRR_SVG_AGG:
 				content_unicode = True
 				if len(args) > 3:
 					content_unicode = args[3]
-				alpha_value = 128
+				alpha_value = 0
 				if len(args) > 4:
 					alpha_value = args[4]
 				color_format = ECF_A8R8G8B8
@@ -14911,14 +14920,26 @@ if BUILD_WITH_IRR_SVG_AGG:
 					pass
 		def parse(self, fs, file_name = 'file.svg', content_unicode = True, alpha_value = 0, color_format = ECF_A8R8G8B8, stride = 4):
 			svg_agg_image_parse(self.c_pointer, fs.c_pointer, file_name, content_unicode, alpha_value, color_format, stride)
+		def rotate(self, value = 0.01):
+			svg_agg_image_rotate(self.c_pointer, value)
+		def rotate_around_center(self, value = 0.01):
+			svg_agg_image_rotate_around_center(self.c_pointer, value)
 		def scale(self, x = 1.0, y = 1.0):
 			svg_agg_image_scale(self.c_pointer, x, y)
 		def scale_rateably(self, value = 1.0):
 			svg_agg_image_scale_rateably(self.c_pointer, value)
+		def get_image_pointer(self):
+			return IImage(svg_agg_image_get_image_pointer(self.c_pointer))
 		def get_image(self, rendering = False):
 			return IImage(svg_agg_image_get_image(self.c_pointer, rendering))
+		def delete_image(self):
+			svg_agg_image_delete_image(self.c_pointer)
+		def get_texture_pointer(self):
+			return ITexture(svg_agg_image_get_texture_pointer(self.c_pointer))
 		def get_texture(self, rendering = False, adding = False):
 			return ITexture(svg_agg_image_get_texture(self.c_pointer, rendering, adding))
+		def delete_texture(self):
+			svg_agg_image_delete_texture(self.c_pointer)
 		#~ def drop(self):
 			#~ return svg_agg_image_drop(self.c_pointer)
 		def get_width(self):
@@ -14988,19 +15009,6 @@ if BUILD_WITH_IRR_SVG_CAIRO:
 			return vector2du(self.get_width_u32(), self.get_height_u32())
 
 if BUILD_WITH_3D_TEXT:
-	class Text3DSimple(ISceneNode):
-		def __init__(self, *args, **kwargs):
-			self.c_pointer = self.ctor(*args, **kwargs)
-		def ctor(self, parent, mgr, id = -1):
-			if not isinstance(parent, ISceneNode):
-				parent = mgr.getRootSceneNode()
-			return IText3DSimple_ctor(parent.c_pointer, mgr.c_pointer, id)
-		def setText(self, text, font_file_name = 0, size = 10, depth = 50.0, primitive_type = EPT_TRIANGLES, index_type = EIT_16BIT):
-			if not font_file_name:
-				from os import environ
-				font_file_name = environ['SYSTEMROOT']+'/Fonts/Arial.ttf'
-			return IText3DSimple_setText(self.c_pointer, text, font_file_name, size, depth, primitive_type, index_type)
-
 	class IText3D(ISceneNode):
 		def __init__(self, *args, **kwargs):
 			self.c_pointer = self.ctor(*args, **kwargs)
@@ -15023,6 +15031,32 @@ if BUILD_WITH_3D_TEXT:
 			return IText3D_get_draw_as_figures(self.c_pointer)
 		def set_draw_as_figures(self, draw_as_figures = DAF_NO, material = SMaterial(0)):
 			IText3D_set_draw_as_figures(self.c_pointer, draw_as_figures, material.c_pointer)
+
+	class Text3DSimple(ISceneNode):
+		def __init__(self, *args, **kwargs):
+			self.c_pointer = self.ctor(*args, **kwargs)
+		def ctor(self, parent, mgr, id = -1):
+			if not isinstance(parent, ISceneNode):
+				parent = mgr.getRootSceneNode()
+			return IText3DSimple_ctor(parent.c_pointer, mgr.c_pointer, id)
+		def setText(self, text, font_file_name = 0, size = 10, depth = 50.0, primitive_type = EPT_TRIANGLES, index_type = EIT_16BIT):
+			if not font_file_name:
+				from os import environ
+				font_file_name = environ['SYSTEMROOT']+'/Fonts/Arial.ttf'
+			return IText3DSimple_setText(self.c_pointer, text, font_file_name, size, depth, primitive_type, index_type)
+
+	class Text3DPlane(ISceneNode):
+		def __init__(self, *args, **kwargs):
+			self.c_pointer = self.ctor(*args, **kwargs)
+		def ctor(self, parent, mgr, id = -1):
+			if not isinstance(parent, ISceneNode):
+				parent = mgr.getRootSceneNode()
+			return IText3DPlane_ctor(parent.c_pointer, mgr.c_pointer, id)
+		def setText(self, text, font_file_name = 0, size = 10, depth = 50.0, primitive_type = EPT_TRIANGLES, index_type = EIT_16BIT):
+			if not font_file_name:
+				from os import environ
+				font_file_name = environ['SYSTEMROOT']+'/Fonts/Arial.ttf'
+			return IText3DPlane_setText(self.c_pointer, text, font_file_name, size, depth, primitive_type, index_type)
 
 def createDevice(deviceType = EDT_SOFTWARE, windowSize = dimension2du(640,480), bits = 16, fullscreen = False, stencilbuffer = False, vsync = False, receiver = IEventReceiver(0)):
 	return IrrlichtDevice(deviceType, windowSize, bits, fullscreen, stencilbuffer, vsync, receiver)
