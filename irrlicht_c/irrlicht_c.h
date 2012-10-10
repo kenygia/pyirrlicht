@@ -4,9 +4,11 @@
 
 // for __stdcall Irrlicht.lib must be builded with _STDCALL_SUPPORTED flag
 
+
 #define _IRR_STATIC_LIB_
 
-//#define _IRR_WCHAR_FILESYSTEM// this flag must be first checked in IrrCompileConfig.h header file, and NO_IRR_WCHAR_FILESYSTEM unchecked
+//#include "IrrCompileConfig.h"
+#define _IRR_WCHAR_FILESYSTEM// this flag must be first checked in IrrCompileConfig.h header file, and NO_IRR_WCHAR_FILESYSTEM unchecked
 
 #define _COMPILE_WITH_2DTTFONT_
 
@@ -141,7 +143,9 @@ using namespace quake3;
 #include "_IParticleSystemSceneNode.h"
 #include "_IQ3LevelMesh.h"
 #include "_IQ3Shader.h"
+#if (IRRLICHT_VERSION_MAJOR >= 1 && IRRLICHT_VERSION_MINOR > 7)
 #include "_IRandomizer.h"
+#endif
 #include "_IReadFile.h"
 #include "_IReferenceCounted.h"
 #include "_ISceneCollisionManager.h"

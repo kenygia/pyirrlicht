@@ -2,8 +2,8 @@
 # http://pir.sourceforge.net
 # BSD license
 
-__version__ = pyirrlicht_version = '1.1.3'
-__versionTime__ = '2012-10-08'
+__version__ = pyirrlicht_version = '1.1.4'
+__versionTime__ = '2012-10-10'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -1376,19 +1376,19 @@ BUILD_WITH_IRR_SVG_AGG = ctypes.c_bool.in_dll(c_module, 'BUILD_WITH_IRR_SVG_AGG'
 if BUILD_WITH_IRR_SVG_AGG:
 	svg_agg_image_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_ctor1', c_module))
 	svg_agg_image_parse = func_type(None, ctypes.c_void_p, ctypes.c_void_p, fschar_t, ctypes.c_bool, ctypes.c_uint, ctypes.c_int, ctypes.c_int)(('svg_agg_image_parse', c_module))
+	svg_agg_image_translate = func_type(None, ctypes.c_void_p, ctypes.c_double, ctypes.c_double)(('svg_agg_image_translate', c_module))
 	svg_agg_image_rotate = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_rotate', c_module))
 	svg_agg_image_rotate_around_center = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_rotate_around_center', c_module))
 	svg_agg_image_scale = func_type(None, ctypes.c_void_p, ctypes.c_double, ctypes.c_double)(('svg_agg_image_scale', c_module))
 	svg_agg_image_scale_rateably = func_type(None, ctypes.c_void_p, ctypes.c_double)(('svg_agg_image_scale_rateably', c_module))
-	#~ svg_agg_image_render = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_render', c_module))
 	svg_agg_image_get_image_pointer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_image_pointer', c_module))
 	svg_agg_image_get_image = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('svg_agg_image_get_image', c_module))
 	svg_agg_image_delete_image = func_type(None, ctypes.c_void_p)(('svg_agg_image_delete_image', c_module))
 	svg_agg_image_get_texture_pointer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_texture_pointer', c_module))
 	svg_agg_image_get_texture = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool)(('svg_agg_image_get_texture', c_module))
 	svg_agg_image_delete_texture = func_type(None, ctypes.c_void_p)(('svg_agg_image_delete_texture', c_module))
-	#~ svg_agg_image_drop = func_type(ctypes.c_bool, ctypes.c_void_p)(('svg_agg_image_drop', c_module))
-	#~ svg_agg_image_get_size = func_type(ctypes.c_void_p, ctypes.c_void_p)(('svg_agg_image_get_size', c_module))
+	svg_agg_image_bounding_rect = func_type(None, ctypes.c_void_p)(('svg_agg_image_bounding_rect', c_module))
+	svg_agg_image_set_size_as_square = func_type(None, ctypes.c_void_p)(('svg_agg_image_set_size_as_square', c_module))
 	svg_agg_image_get_width = func_type(ctypes.c_double, ctypes.c_void_p)(('svg_agg_image_get_width', c_module))
 	svg_agg_image_get_width_u32 = func_type(ctypes.c_uint, ctypes.c_void_p)(('svg_agg_image_get_width_u32', c_module))
 	svg_agg_image_get_height = func_type(ctypes.c_double, ctypes.c_void_p)(('svg_agg_image_get_height', c_module))
@@ -3803,7 +3803,7 @@ IVideoDriver_getImageLoader = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes
 IVideoDriver_getImageWriterCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IVideoDriver_getImageWriterCount', c_module))
 IVideoDriver_getImageWriter = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IVideoDriver_getImageWriter', c_module))
 IVideoDriver_setMaterial = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_setMaterial', c_module))
-IVideoDriver_getTexture1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_char_p)(('IVideoDriver_getTexture1', c_module))
+IVideoDriver_getTexture1 = func_type(ctypes.c_void_p, ctypes.c_void_p, fschar_t)(('IVideoDriver_getTexture1', c_module))
 IVideoDriver_getTexture2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IVideoDriver_getTexture2', c_module))
 IVideoDriver_getTextureByIndex = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint)(('IVideoDriver_getTextureByIndex', c_module))
 IVideoDriver_getTextureCount = func_type(ctypes.c_uint, ctypes.c_void_p)(('IVideoDriver_getTextureCount', c_module))
@@ -4569,6 +4569,10 @@ IrrlichtDevice_getLogger = func_type(ctypes.c_void_p, ctypes.c_void_p)(('Irrlich
 IrrlichtDevice_getVideoModeList = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_getVideoModeList', c_module))
 IrrlichtDevice_getOSOperator = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_getOSOperator', c_module))
 IrrlichtDevice_getTimer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_getTimer', c_module))
+if IRRLICHT_VERSION >= 180:
+	IrrlichtDevice_getRandomizer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_getRandomizer', c_module))
+	IrrlichtDevice_setRandomizer = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_setRandomizer', c_module))
+	IrrlichtDevice_createDefaultRandomizer = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IrrlichtDevice_createDefaultRandomizer', c_module))
 IrrlichtDevice_setWindowCaption = func_type(None, ctypes.c_void_p, ctypes.c_wchar_p)(('IrrlichtDevice_setWindowCaption', c_module))
 IrrlichtDevice_isWindowActive = func_type(ctypes.c_bool, ctypes.c_void_p)(('IrrlichtDevice_isWindowActive', c_module))
 IrrlichtDevice_isWindowFocused = func_type(ctypes.c_bool, ctypes.c_void_p)(('IrrlichtDevice_isWindowFocused', c_module))
@@ -12701,7 +12705,7 @@ class IVideoDriver(IReferenceCounted):
 		IVideoDriver_setMaterial(self.c_pointer, material.c_pointer)
 	def getTexture(self, file_or_filename):
 		if isinstance(file_or_filename, str):
-			return self.getTexture1(as_ansi(file_or_filename))
+			return self.getTexture1(file_or_filename)#as_ansi(file_or_filename)
 		else:
 			return self.getTexture2(file_or_filename)
 	def getTexture1(self, filename):
@@ -14661,6 +14665,26 @@ class ITimer(IReferenceCounted):
 	def tick(self):
 		ITimer_tick(self.c_pointer)
 
+if IRRLICHT_VERSION >= 180:
+	IRandomizer_reset = func_type(None, ctypes.c_void_p, ctypes.c_int)(('IRandomizer_reset', c_module))
+	IRandomizer_rand = func_type(ctypes.c_int, ctypes.c_void_p)(('IRandomizer_rand', c_module))
+	IRandomizer_frand = func_type(ctypes.c_float, ctypes.c_void_p)(('IRandomizer_frand', c_module))
+	IRandomizer_randMax = func_type(ctypes.c_int, ctypes.c_void_p)(('IRandomizer_randMax', c_module))
+
+	class IRandomizer(IReferenceCounted):
+		def __init__(self, *args, **kwargs):
+			self.c_pointer = None
+			if len(args) > 0:
+				self.c_pointer = args[0]
+		def reset(self, value = 0x0f0f0f0f):
+			IRandomizer_reset(self.c_pointer, value)
+		def rand(self):
+			return IRandomizer_rand(self.c_pointer)
+		def frand(self):
+			return IRandomizer_frand(self.c_pointer)
+		def randMax(self):
+			return IRandomizer_randMax(self.c_pointer)
+
 class IrrlichtDevice(IReferenceCounted):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = None
@@ -14706,6 +14730,13 @@ class IrrlichtDevice(IReferenceCounted):
 		return IOSOperator(IrrlichtDevice_getOSOperator(self.c_pointer))
 	def getTimer(self):
 		return ITimer(IrrlichtDevice_getTimer(self.c_pointer))
+	if IRRLICHT_VERSION >= 180:
+		def getRandomizer(self):
+			return IRandomizer(IrrlichtDevice_getRandomizer(self.c_pointer))
+		def setRandomizer(self, r):
+			IrrlichtDevice_setRandomizer(self.c_pointer, r.c_pointer)
+		def createDefaultRandomizer(self):
+			return IRandomizer(IrrlichtDevice_createDefaultRandomizer(self.c_pointer))
 	def setWindowCaption(self, text):
 		IrrlichtDevice_setWindowCaption(self.c_pointer, text)
 	def isWindowActive(self):
@@ -14920,6 +14951,8 @@ if BUILD_WITH_IRR_SVG_AGG:
 					pass
 		def parse(self, fs, file_name = 'file.svg', content_unicode = True, alpha_value = 0, color_format = ECF_A8R8G8B8, stride = 4):
 			svg_agg_image_parse(self.c_pointer, fs.c_pointer, file_name, content_unicode, alpha_value, color_format, stride)
+		def translate(self, x, y):
+			svg_agg_image_translate(self.c_pointer, x, y)
 		def rotate(self, value = 0.01):
 			svg_agg_image_rotate(self.c_pointer, value)
 		def rotate_around_center(self, value = 0.01):
@@ -14940,8 +14973,10 @@ if BUILD_WITH_IRR_SVG_AGG:
 			return ITexture(svg_agg_image_get_texture(self.c_pointer, rendering, adding))
 		def delete_texture(self):
 			svg_agg_image_delete_texture(self.c_pointer)
-		#~ def drop(self):
-			#~ return svg_agg_image_drop(self.c_pointer)
+		def bounding_rect(self):
+			svg_agg_image_bounding_rect(self.c_pointer)
+		def set_size_as_square(self):
+			svg_agg_image_set_size_as_square(self.c_pointer)
 		def get_width(self):
 			return svg_agg_image_get_width(self.c_pointer)
 		width = property(get_width)

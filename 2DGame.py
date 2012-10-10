@@ -39,12 +39,12 @@ if run_app:
 		print ('++++ PYBASS module not accessible!!!')
 
 	from pyirrlicht import *
-	#~ driverType = EDT_NULL
-	#~ driverType = EDT_SOFTWARE
-	#~ driverType = EDT_BURNINGSVIDEO
-	#~ driverType = EDT_DIRECT3D8
-	#~ driverType = EDT_DIRECT3D9
-	driverType = EDT_OPENGL
+	#~ driver_type = EDT_NULL
+	#~ driver_type = EDT_SOFTWARE
+	#~ driver_type = EDT_BURNINGSVIDEO
+	#~ driver_type = EDT_DIRECT3D8
+	#~ driver_type = EDT_DIRECT3D9
+	driver_type = EDT_OPENGL
 
 	GUI_ID_QUIT = 0x10000
 	GUI_ID_ABOUT = 0x10001
@@ -216,7 +216,7 @@ if run_app:
 				pass
 			return False
 		def IsKeyDown(self, keyCode):
-			return self.KeyIsDown[keyCode];
+			return self.KeyIsDown[keyCode]
 		def show_warning(self):
 			self.gui.addMessageBox(_('Warning'), _('For finish this operation you need restart game!'))
 		def set_device_type(self, new_device_type = 0):
@@ -240,21 +240,36 @@ if run_app:
 		i_event_receiver.gui = guienv
 		device.setEventReceiver(i_event_receiver)
 
-		bells = driver.getTexture('2dgame/bells.png')
+		fn_bells = 'bells.png'
+		fn_santa = 'santa.png'
+		fn_santa_pipe = 'santa_pipe.png'
+		fn_present = 'present-red.png'
+		fn_laurel = 'laurel.png'
+		bells = driver.getTexture('2dgame/%s' % fn_bells)
 		if bells:
 			bells_size = bells.getOriginalSize()
-		santa = driver.getTexture('2dgame/santa.png')
+		else:
+			print('file "%s" not found' % fn_bells)
+		santa = driver.getTexture('2dgame/%s' % fn_santa)
 		if santa:
 			santa_size = santa.getOriginalSize()
-		santa_pipe = driver.getTexture('2dgame/santa_pipe.png')
+		else:
+			print('file "%s" not found' % fn_santa)
+		santa_pipe = driver.getTexture('2dgame/%s' % fn_santa_pipe)
 		if santa_pipe:
 			santa_pipe_size = santa_pipe.getOriginalSize()
-		present_red = driver.getTexture('2dgame/present-red.png')
+		else:
+			print('file "%s" not found' % fn_santa_pipe)
+		present_red = driver.getTexture('2dgame/%s' % fn_present)
 		if present_red:
 			present_red_size = present_red.getOriginalSize()
-		cur_img = driver.getTexture('2dgame/laurel.png')
+		else:
+			print('file "%s" not found' % fn_present)
+		cur_img = driver.getTexture('2dgame/%s' % fn_laurel)
 		if cur_img:
 			cur_img_size = cur_img.getOriginalSize()
+		else:
+			print('file "%s" not found' % fn_laurel)
 
 		#~ snowflake = driver.getTexture('2dgame/snowflake.png')
 		#~ if snowflake:

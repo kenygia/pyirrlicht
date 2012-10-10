@@ -329,11 +329,7 @@ public:
 			//for (int i = 0; i < gradients.size(); i++)
 			//	wprintf(L"=== gradient id = %s, xlink:href = %s\n", gradients[i].id(), gradients[i].xlink_href());
 			//_path_renderer_.arrange_orientations();
-			_path_renderer_.bounding_rect(&_min_x_, &_min_y_, &_width_, &_height_);
-			if (_width_ < 0)
-				_width_ *= -1;
-			if (_height_ < 0)
-				_height_ *= -1;
+			//bounding_rect();
 		}
 		else
 			printf("svg_agg_image: ERROR create IXMLReader from file = %s\n", _file_name_.c_str());
@@ -691,6 +687,10 @@ public:
 		if (!cmds.empty())
 			cmds.clear();
 	}
+	void translate(double x, double y)
+	{
+		_trans_affine_.translate(x, y);
+	}
 	void rotate(double a = 0.01)
 	{
 		_trans_affine_.rotate(a);
@@ -870,6 +870,21 @@ public:
 		}
 		return _texture_;
 	}
+	void bounding_rect()
+	{
+		_path_renderer_.bounding_rect(&_min_x_, &_min_y_, &_width_, &_height_);
+		if (_width_ < 0)
+			_width_ *= -1;
+		if (_height_ < 0)
+			_height_ *= -1;
+	}
+	void set_size_as_square()
+	{
+		if (_width_ > _height_)
+			_height_ = _width_;
+		if (_height_ > _width_)
+			_width_ = _height_;
+	}
 	double get_width(){return _width_;}
 	u32 get_width_u32()
 	{
@@ -878,6 +893,7 @@ public:
 			result++;
 		return result;
 	}
+	void set_width(double value){_width_ = value;}
 	double get_height(){return _height_;}
 	u32 get_height_u32()
 	{
@@ -886,9 +902,15 @@ public:
 			result++;
 		return result;
 	}
+	void set_height(double value){_height_ = value;}
 	vector2d<u32> get_size()
 	{
 		return vector2d<u32>(get_width_u32(), get_height_u32());
+	}
+	void set_size(vector2d<u32> size)
+	{
+		_width_ = (double)size.X;
+		_height_ = (double)size.Y;
 	}
 	~svg_agg_image()
 	{
@@ -933,6 +955,7 @@ IRRLICHT_C_API svg_agg_image* svg_agg_image_ctor1(IVideoDriver* video_driver, IF
 IRRLICHT_C_API void svg_agg_image_parse(svg_agg_image* pointer, IFileSystem* fs, const fschar_t* file_name, bool content_unicode = true, u32 alpha_value = 128, video::ECOLOR_FORMAT color_format = ECF_A8R8G8B8, int stride = 4)
 {pointer->parse(fs, irr::io::path(file_name), content_unicode, alpha_value, color_format, stride);}
 
+IRRLICHT_C_API void svg_agg_image_translate(svg_agg_image* pointer, double x, double y){pointer->translate(x, y);}
 IRRLICHT_C_API void svg_agg_image_rotate(svg_agg_image* pointer, double a = 0.01){pointer->rotate(a);}
 IRRLICHT_C_API void svg_agg_image_rotate_around_center(svg_agg_image* pointer, double a = 0.01){pointer->rotate_around_center(a);}
 IRRLICHT_C_API void svg_agg_image_scale(svg_agg_image* pointer, double x = 1.0, double y = 1.0){pointer->scale(x, y);}
@@ -946,7 +969,8 @@ IRRLICHT_C_API ITexture* svg_agg_image_get_texture_pointer(svg_agg_image* pointe
 IRRLICHT_C_API ITexture* svg_agg_image_get_texture(svg_agg_image* pointer, bool rendering = false, bool adding = false){return pointer->get_texture(rendering, adding);}
 IRRLICHT_C_API void svg_agg_image_delete_texture(svg_agg_image* pointer){pointer->delete_texture();}
 
-//IRRLICHT_C_API vector2d<u32>* svg_agg_image_get_size(svg_agg_image* pointer){return pointer->get_size();}
+IRRLICHT_C_API void svg_agg_image_bounding_rect(svg_agg_image* pointer){pointer->bounding_rect();}
+IRRLICHT_C_API void svg_agg_image_set_size_as_square(svg_agg_image* pointer){pointer->set_size_as_square();}
 IRRLICHT_C_API double svg_agg_image_get_width(svg_agg_image* pointer){return pointer->get_width();}
 IRRLICHT_C_API u32 svg_agg_image_get_width_u32(svg_agg_image* pointer){return pointer->get_width_u32();}
 IRRLICHT_C_API double svg_agg_image_get_height(svg_agg_image* pointer){return pointer->get_height();}

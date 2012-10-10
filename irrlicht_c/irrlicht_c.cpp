@@ -3,6 +3,20 @@
 // BSD license
 #include "irrlicht_c.h"
 
+#ifdef _IRR_WINDOWS_
+#ifdef _IRR_STATIC_LIB_
+#pragma comment(lib, "irrlicht_static.lib")
+#else//_IRR_STATIC_LIB_
+#pragma comment(lib, "irrlicht.lib")
+#endif//_IRR_STATIC_LIB_
+#else//LINUX
+#ifdef _IRR_STATIC_LIB_
+#pragma comment(lib, "irrlicht_static.a")
+#else//_IRR_STATIC_LIB_
+#pragma comment(lib, "irrlicht.a")
+#endif//_IRR_STATIC_LIB_
+#endif//_IRR_WINDOWS_
+
 #ifdef _COMPILE_WITH_2DTTFONT_
 #ifdef _IRR_WINDOWS_
 #ifdef _DEBUG
