@@ -25,7 +25,7 @@ IRRLICHT_C_API IMeshSceneNode* ISceneManager_addCubeSceneNode(ISceneManager* poi
 {return pointer->addCubeSceneNode(size, parent, id, position, rotation, scale);}
 IRRLICHT_C_API IMeshSceneNode* ISceneManager_addSphereSceneNode(ISceneManager* pointer, f32 radius=5.0f, s32 polyCount=16, ISceneNode* parent=0, s32 id=-1, const core::vector3df& position = core::vector3df(0,0,0), const vector3df& rotation = vector3df(0,0,0), const vector3df& scale = vector3df(1.0f, 1.0f, 1.0f))
 {return pointer->addSphereSceneNode(radius, polyCount, parent, id, position, rotation, scale);}
-IRRLICHT_C_API IAnimatedMeshSceneNode* ISceneManager_addAnimatedMeshSceneNode(ISceneManager* pointer, IAnimatedMesh* mesh, ISceneNode* parent=0, s32 id=-1, const core::vector3df& position = core::vector3df(0,0,0), const vector3df& rotation = vector3df(0,0,0), const vector3df& scale = vector3df(1.0f, 1.0f, 1.0f), bool alsoAddIfMeshPointerZero=false)
+IRRLICHT_C_API IAnimatedMeshSceneNode* ISceneManager_addAnimatedMeshSceneNode1(ISceneManager* pointer, IAnimatedMesh* mesh, ISceneNode* parent=0, s32 id=-1, const core::vector3df& position = core::vector3df(0,0,0), const vector3df& rotation = vector3df(0,0,0), const vector3df& scale = vector3df(1.0f, 1.0f, 1.0f), bool alsoAddIfMeshPointerZero=false)
 {return pointer->addAnimatedMeshSceneNode(mesh, parent, id, position, rotation, scale, alsoAddIfMeshPointerZero);}
 IRRLICHT_C_API IAnimatedMeshSceneNode* ISceneManager_addAnimatedMeshSceneNode2(ISceneManager* pointer, IAnimatedMesh* mesh)
 {return pointer->addAnimatedMeshSceneNode(mesh);}
@@ -45,8 +45,8 @@ IRRLICHT_C_API IMeshSceneNode* ISceneManager_addOctreeSceneNode1(ISceneManager* 
 {return pointer->addOctreeSceneNode(mesh, parent, id, minimalPolysPerNode, alsoAddIfMeshPointerZero);}
 IRRLICHT_C_API IMeshSceneNode* ISceneManager_addOctreeSceneNode2(ISceneManager* pointer, IMesh* mesh, ISceneNode* parent=0, s32 id=-1, s32 minimalPolysPerNode=256, bool alsoAddIfMeshPointerZero=false)
 {return pointer->addOctreeSceneNode(mesh, parent, id, minimalPolysPerNode, alsoAddIfMeshPointerZero);}
-IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNode(ISceneManager* pointer, ISceneNode* parent = 0, const core::vector3df& position = core::vector3df(0,0,0), const core::vector3df& lookat = core::vector3df(0,0,100), s32 id=-1)
-{return pointer->addCameraSceneNode(parent, position, lookat, id);}
+IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNode(ISceneManager* pointer, ISceneNode* parent = 0, const core::vector3df& position = core::vector3df(0,0,0), const core::vector3df& lookat = core::vector3df(0,0,100), s32 id = -1, bool makeActive = true)
+{return pointer->addCameraSceneNode(parent, position, lookat, id, makeActive);}
 IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeFPS(ISceneManager* pointer, ISceneNode* parent = 0, f32 rotateSpeed = 100.0f, f32 moveSpeed = 0.5f, s32 id=-1, SKeyMap* keyMapArray=0, s32 keyMapSize=0, bool noVerticalMovement=false, f32 jumpSpeed = 0.f, bool invertMouse=false)
 {return pointer->addCameraSceneNodeFPS(parent, rotateSpeed, moveSpeed, id, keyMapArray, keyMapSize, noVerticalMovement, jumpSpeed, invertMouse);}
 IRRLICHT_C_API ICameraSceneNode* ISceneManager_addCameraSceneNodeFPS2(ISceneManager* pointer)

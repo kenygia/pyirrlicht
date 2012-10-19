@@ -2,8 +2,8 @@
 # http://pir.sourceforge.net
 # BSD license
 
-__version__ = pyirrlicht_version = '1.1.4'
-__versionTime__ = '2012-10-10'
+__version__ = pyirrlicht_version = '1.1.5'
+__versionTime__ = '2012-10-19'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -1416,9 +1416,15 @@ if BUILD_WITH_IRR_SVG_CAIRO:
 	svg_cairo_image_get_height_u32 = func_type(ctypes.c_uint, ctypes.c_void_p)(('svg_cairo_image_get_height_u32', c_module))
 
 # MainLoop main loop helper example
-MainLoop_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool)(('MainLoop_ctor', c_module))
+MainLoop_ctor1 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('MainLoop_ctor1', c_module))
+MainLoop_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('MainLoop_ctor2', c_module))
+MainLoop_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_uint, ctypes.c_bool)(('MainLoop_ctor3', c_module))
 MainLoop_start = func_type(None, ctypes.c_void_p)(('MainLoop_start', c_module))
+MainLoop_start_sm = func_type(None, ctypes.c_void_p)(('MainLoop_start_sm', c_module))
+MainLoop_start_ge = func_type(None, ctypes.c_void_p)(('MainLoop_start_ge', c_module))
+MainLoop_start_sm_ge = func_type(None, ctypes.c_void_p)(('MainLoop_start_sm_ge', c_module))
 MainLoop_stop = func_type(None, ctypes.c_void_p)(('MainLoop_stop', c_module))
+MainLoop_is_running = func_type(ctypes.c_bool, ctypes.c_void_p)(('MainLoop_is_running', c_module))
 
 #class array
 array_ctor1 = func_type(ctypes.c_void_p)(('array_ctor1', c_module))
@@ -3944,7 +3950,7 @@ ISceneManager_getFileSystem = func_type(ctypes.c_void_p, ctypes.c_void_p)(('ISce
 ISceneManager_addVolumeLightSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_uint, ctypes.c_uint, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addVolumeLightSceneNode', c_module))
 ISceneManager_addCubeSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addCubeSceneNode', c_module))
 ISceneManager_addSphereSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addSphereSceneNode', c_module))
-ISceneManager_addAnimatedMeshSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('ISceneManager_addAnimatedMeshSceneNode', c_module))
+ISceneManager_addAnimatedMeshSceneNode1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('ISceneManager_addAnimatedMeshSceneNode1', c_module))
 ISceneManager_addAnimatedMeshSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addAnimatedMeshSceneNode2', c_module))
 ISceneManager_addMeshSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool)(('ISceneManager_addMeshSceneNode', c_module))
 ISceneManager_addWaterSurfaceSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addWaterSurfaceSceneNode', c_module))
@@ -3957,7 +3963,7 @@ else:
 	ISceneManager_addCameraSceneNodeMaya = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_float, ctypes.c_bool)(('ISceneManager_addCameraSceneNodeMaya', c_module))
 ISceneManager_addOctreeSceneNode1 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_bool)(('ISceneManager_addOctreeSceneNode1', c_module))
 ISceneManager_addOctreeSceneNode2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_int, ctypes.c_bool)(('ISceneManager_addOctreeSceneNode2', c_module))
-ISceneManager_addCameraSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int)(('ISceneManager_addCameraSceneNode', c_module))
+ISceneManager_addCameraSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool)(('ISceneManager_addCameraSceneNode', c_module))
 ISceneManager_addCameraSceneNodeFPS = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_float, ctypes.c_int, ctypes.c_void_p, ctypes.c_int, ctypes.c_bool, ctypes.c_float, ctypes.c_bool)(('ISceneManager_addCameraSceneNodeFPS', c_module))
 ISceneManager_addLightSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_float, ctypes.c_int)(('ISceneManager_addLightSceneNode', c_module))
 ISceneManager_addBillboardSceneNode = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneManager_addBillboardSceneNode', c_module))
@@ -13340,10 +13346,10 @@ class ISceneManager(IReferenceCounted):
 		else:
 			print('WARNING: mesh is not valid instance')
 			return IMeshSceneNode(0)
-	def addCameraSceneNode(self, parent = ISceneNode(0), position = vector3df(0,0,0), lookat = vector3df(0,0,100), id = -1):
+	def addCameraSceneNode(self, parent = ISceneNode(0), position = vector3df(0,0,0), lookat = vector3df(0,0,100), id = -1, makeActive = True):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
-		return ICameraSceneNode(ISceneManager_addCameraSceneNode(self.c_pointer, parent.c_pointer, position.c_pointer, lookat.c_pointer, id))
+		return ICameraSceneNode(ISceneManager_addCameraSceneNode(self.c_pointer, parent.c_pointer, position.c_pointer, lookat.c_pointer, id, makeActive))
 	def addCameraSceneNodeMaya(self, parent = ISceneNode(0), rotateSpeed = -1500.0, zoomSpeed = 200.0, translationSpeed = 1500.0, id = -1, distance = 70.0, makeActive = True):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
@@ -14879,13 +14885,36 @@ class SIrrlichtCreationParameters(object):
 
 class MainLoop:
 	def __init__(self, *args, **kwargs):
-		self.c_pointer = self.ctor(*args, **kwargs)
-	def ctor(self, device, driver, smgr = ISceneManager(0), guienv = IGUIEnvironment(0), backBuffer = True, zBuffer = True, color = SColor(255,100,100,140), videoData = SExposedVideoData(0), sourceRect = recti(0), sleep_time_ms = 0, sleep_pause_timer = False):
-		return MainLoop_ctor(device.c_pointer, driver.c_pointer, smgr.c_pointer, guienv.c_pointer, backBuffer, zBuffer, color.c_pointer, videoData.c_pointer, sourceRect.c_pointer, sleep_time_ms, sleep_pause_timer)
+		if len(args) == 1 and not len(kwargs):
+			self.c_pointer = self.ctor1(*args)
+		if len(args) < 5 and not len(kwargs):
+			self.c_pointer = self.ctor2(*args)
+		else:
+			self.c_pointer = self.ctor3(*args, **kwargs)
+	def __del__(self):
+		if self.c_pointer:
+			try:
+				delete_pointer(self.c_pointer)
+			except:
+				pass
+	def ctor1(self, device):
+		return MainLoop_ctor1(device.c_pointer)
+	def ctor2(self, device, driver = IVideoDriver(0), smgr = ISceneManager(0), guienv = IGUIEnvironment(0)):
+		return MainLoop_ctor2(device.c_pointer, driver.c_pointer, smgr.c_pointer, guienv.c_pointer)
+	def ctor3(self, device, driver, smgr = ISceneManager(0), guienv = IGUIEnvironment(0), backBuffer = True, zBuffer = True, color = SColor(255,100,100,140), videoData = SExposedVideoData(0), sourceRect = recti(0), sleep_time_ms = 0, sleep_pause_timer = False):
+		return MainLoop_ctor3(device.c_pointer, driver.c_pointer, smgr.c_pointer, guienv.c_pointer, backBuffer, zBuffer, color.c_pointer, videoData.c_pointer, sourceRect.c_pointer, sleep_time_ms, sleep_pause_timer)
 	def start(self):
 		MainLoop_start(self.c_pointer)
+	def start_sm(self):
+		MainLoop_start_sm(self.c_pointer)
+	def start_ge(self):
+		MainLoop_start_ge(self.c_pointer)
+	def start_sm_ge(self):
+		MainLoop_start_sm_ge(self.c_pointer)
 	def stop(self):
 		MainLoop_stop(self.c_pointer)
+	def is_running(self):
+		return MainLoop_is_running(self.c_pointer)
 
 if BUILD_WITH_AGG:
 	def svg_path_renderer_from_file(file_name = 'tiger.svg'):
