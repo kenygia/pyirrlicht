@@ -1094,43 +1094,61 @@ Enum eConstructor
 End Enum
 
 Enum eQ3ModifierFunction
-		TCMOD				= 0
-		DEFORMVERTEXES		= 1
-		RGBGEN				= 2
-		TCGEN				= 3
-		MAP					= 4
-		ALPHAGEN			= 5
-		FUNCTION2			= &h10
-		SCROLL				= FUNCTION2 + 1
-		SCALE				= FUNCTION2 + 2
-		ROTATE				= FUNCTION2 + 3
-		STRETCH				= FUNCTION2 + 4
-		TURBULENCE			= FUNCTION2 + 5
-		WAVE				= FUNCTION2 + 6
-		IDENTITY			= FUNCTION2 + 7
-		VERTEX				= FUNCTION2 + 8
-		TEXTURE				= FUNCTION2 + 9
-		LIGHTMAP			= FUNCTION2 + 10
-		ENVIRONMENT			= FUNCTION2 + 11
-		DOLLAR_LIGHTMAP		= FUNCTION2 + 12
-		BULGE				= FUNCTION2 + 13
-		AUTOSPRITE			= FUNCTION2 + 14
-		AUTOSPRITE2			= FUNCTION2 + 15
-		TRANSFORM			= FUNCTION2 + 16
-		EXACTVERTEX			= FUNCTION2 + 17
-		CONSTANT			= FUNCTION2 + 18
-		LIGHTINGSPECULAR	= FUNCTION2 + 19
-		MOVE				= FUNCTION2 + 20
-		NORMAL				= FUNCTION2 + 21
-		IDENTITYLIGHTING	= FUNCTION2 + 22
-		WAVE_MODIFIER_FUNCTION	= &h30
-		SINUS				= WAVE_MODIFIER_FUNCTION + 1
-		COSINUS				= WAVE_MODIFIER_FUNCTION + 2
-		SQUARE				= WAVE_MODIFIER_FUNCTION + 3
-		TRIANGLE			= WAVE_MODIFIER_FUNCTION + 4
-		SAWTOOTH			= WAVE_MODIFIER_FUNCTION + 5
-		SAWTOOTH_INVERSE	= WAVE_MODIFIER_FUNCTION + 6
-		NOISE				= WAVE_MODIFIER_FUNCTION + 7
-		UNKNOWN				= -2
+	TCMOD				= 0
+	DEFORMVERTEXES		= 1
+	RGBGEN				= 2
+	TCGEN				= 3
+	MAP					= 4
+	ALPHAGEN			= 5
+	FUNCTION2			= &h10
+	SCROLL				= FUNCTION2 + 1
+	SCALE				= FUNCTION2 + 2
+	ROTATE				= FUNCTION2 + 3
+	STRETCH				= FUNCTION2 + 4
+	TURBULENCE			= FUNCTION2 + 5
+	WAVE				= FUNCTION2 + 6
+	IDENTITY			= FUNCTION2 + 7
+	VERTEX				= FUNCTION2 + 8
+	TEXTURE				= FUNCTION2 + 9
+	LIGHTMAP			= FUNCTION2 + 10
+	ENVIRONMENT			= FUNCTION2 + 11
+	DOLLAR_LIGHTMAP		= FUNCTION2 + 12
+	BULGE				= FUNCTION2 + 13
+	AUTOSPRITE			= FUNCTION2 + 14
+	AUTOSPRITE2			= FUNCTION2 + 15
+	TRANSFORM			= FUNCTION2 + 16
+	EXACTVERTEX			= FUNCTION2 + 17
+	CONSTANT			= FUNCTION2 + 18
+	LIGHTINGSPECULAR	= FUNCTION2 + 19
+	MOVE				= FUNCTION2 + 20
+	NORMAL				= FUNCTION2 + 21
+	IDENTITYLIGHTING	= FUNCTION2 + 22
+	WAVE_MODIFIER_FUNCTION	= &h30
+	SINUS				= WAVE_MODIFIER_FUNCTION + 1
+	COSINUS				= WAVE_MODIFIER_FUNCTION + 2
+	SQUARE				= WAVE_MODIFIER_FUNCTION + 3
+	TRIANGLE			= WAVE_MODIFIER_FUNCTION + 4
+	SAWTOOTH			= WAVE_MODIFIER_FUNCTION + 5
+	SAWTOOTH_INVERSE	= WAVE_MODIFIER_FUNCTION + 6
+	NOISE				= WAVE_MODIFIER_FUNCTION + 7
+	UNKNOWN				= -2
 End Enum
 
+Enum E_FILESELECTOR_TYPE
+	EFST_OPEN_DIALOG = 0' For opening files
+	EFST_SAVE_DIALOG = 1' For saving files
+	EFST_NUM_TYPES = 2' Not used, just specifies how many possible types there are
+End Enum
+
+Enum E_BLEND_OPERATION
+	EBO_NONE = 0		' No blending happens
+	EBO_ADD = 1			' Default blending adds the color values
+	EBO_SUBTRACT = 2	' This mode subtracts the color values
+	EBO_REVSUBTRACT = 3	' This modes subtracts destination from source
+	EBO_MIN = 4			' Choose minimum value of each color channel
+	EBO_MAX = 5			' Choose maximum value of each color channel
+	EBO_MIN_FACTOR = 6	' Choose minimum value of each color channel after applying blend factors, not widely supported
+	EBO_MAX_FACTOR = 7	' Choose maximum value of each color channel after applying blend factors, not widely supported
+	EBO_MIN_ALPHA = 8	' Choose minimum value of each color channel based on alpha value, not widely supported
+	EBO_MAX_ALPHA = 9	' Choose maximum value of each color channel based on alpha value, not widely supported
+End Enum

@@ -1,9 +1,11 @@
 @REM \FreeBASIC\fbc.exe -arch 386 -exx -g pure_test.bas
 
-@\FreeBASIC\fbc.exe -s gui pure_test.bas
+@REM \FreeBASIC\fbc.exe -s gui pure_test.bas
 
-@MOVE /y *.exe ..\
+@\FreeBASIC\fbc.exe pure_test.bas
 
-@..\pure_test.exe
+@REM MOVE /y *.exe ..\
+
+@REM pure_test.exe
 
 @REM PAUSE

@@ -1,15 +1,17 @@
-# Copyright(c) Max Kolosov 2010-2011 maxkolosov@inbox.ru
-# http://vosolok2008.narod.ru
+# Copyright(c) Maxim Kolosov 2010-2012 maxkolosov@inbox.ru
+# http://pir.sf.net
 # BSD license
 
 import os, sys
 
+irrlicht_library_name = 'irrlicht_c'
 
 prolog_extern_string = '''\' This file was automatic generated with "h2bi" script
 
 Type EVENT_METHOD As Function Cdecl (ByVal _event_ As Any Ptr) As UByte
 
-#inclib "../%s"
+'#inclib "../irrlicht_c"'use if library is in top of current place
+#inclib "%s"
 
 #include once "const.bi"
 
@@ -17,7 +19,7 @@ Extern "c"
 
 \tExtern _IRR_WCHAR_FILESYSTEM Alias "IRR_WCHAR_FILESYSTEM" As Integer
 
-#if _IRR_WCHAR_FILESYSTEM
+#ifdef _IRR_WCHAR_FILESYSTEM
 	Type fschar As WString Ptr
 #else
 	Type fschar As ZString Ptr
@@ -170,6 +172,7 @@ type_convention_container = {
 'IGUIEnvironment':'Any Ptr',
 'IGUIElement':'Any Ptr',
 'IGUIFont':'Any Ptr',
+'IGUITab':'Any Ptr',
 'IImage':'Any Ptr',
 'IWriteFile':'Any Ptr',
 'u32(IRRCALLCONV':'Any Ptr',
@@ -418,7 +421,7 @@ def convert_file(source_file_name, destination_file_name = ''):
 	#~ write_file.write('Type EVENT_METHOD As Function(ByVal _event_ As Any Ptr) As UByte\n\n')
 	#~ write_file.write('#inclib "irrlicht_c"\n\nExtern "c"\n')
 	#~ write_file.write('\tDeclare Sub delete_pointer(ByVal _pointer_ As Any Ptr)\n')
-	write_file.write(prolog_extern_string % 'irrlicht_c')
+	write_file.write(prolog_extern_string % irrlicht_library_name)
 	funcs_container, parent_class_container, class_container, func_count = convert_functions(read_file, write_file)
 	#~ write_file.write('End Extern\n')
 	write_file.write(epilog_extern_string)
@@ -451,7 +454,7 @@ def convert_files(source_dir_name, destination_dir_name = None, functions_file_n
 	#~ functions_file_out.write('Type EVENT_METHOD As Function(ByVal _event_ As Any Ptr) As UByte\n\n')
 	#~ functions_file_out.write('\n#inclib "%s"\n#include once "const.bi"\n\nExtern "c"\n' % source_dir_name)
 	#~ functions_file_out.write('\tDeclare Sub delete_pointer(ByVal _pointer_ As Any Ptr)\n')
-	functions_file_out.write(prolog_extern_string % source_dir_name)
+	functions_file_out.write(prolog_extern_string % irrlicht_library_name)
 
 	for root, dirs, files in os.walk(source_dir_name):
 		for file_name in files:
@@ -509,17 +512,23 @@ def convert_files(source_dir_name, destination_dir_name = None, functions_file_n
 if __name__ == "__main__":
 	from optparse import OptionParser
 	parser = OptionParser()
+	parser.add_option('-i', '--irrlicht_library_name', dest='irrlicht_library_name', default='', help='must be irrlicht library file name without extension, default is irrlicht_c', metavar='STRING', action='store', type='string')
 	parser.add_option('-s', '--source_dir_name', dest='source_dir_name', default='irrlicht_c', help='must be source directory with h files', metavar='STRING', action='store', type='string')
-	parser.add_option('-d', '--destination_dir_name', dest='destination_dir_name', default='irrlicht', help='must be destination directory name', metavar='STRING', action='store', type='string')
-	parser.add_option('-f', '--functions_file_name', dest='functions_file_name', default='', help='must be destination file name', metavar='STRING', action='store', type='string')
+	parser.add_option('-d', '--destination_dir_name', dest='destination_dir_name', default='', help='must be destination directory name', metavar='STRING', action='store', type='string')
+	parser.add_option('-f', '--functions_file_name', dest='functions_file_name', default='irrlicht_c.bi', help='must be destination file name', metavar='STRING', action='store', type='string')
 	parser.add_option('-c', '--classes_file_name', dest='classes_file_name', default='', help='must be destination file name', metavar='STRING', action='store', type='string')
 	parser.add_option('-o', '--classes_in_one_file', dest='classes_in_one_file', default=0, help='must be 0 or 1', metavar='INT', action='store', type='int')
 	parser.add_option('-g', '--generate_classes', dest='generate_classes', default=0, help='generate classes or not, must be 0 or 1', metavar='INT', action='store', type='int')
 	(options, args) = parser.parse_args()
 	if options.functions_file_name == '':
-		options.functions_file_name = options.source_dir_name + '.bi'
-	if not os.path.exists(options.destination_dir_name):
-		os.mkdir(options.destination_dir_name)
+		options.functions_file_name = os.path.basename(options.source_dir_name) + '.bi'
+	if options.generate_classes and not options.destination_dir_name:
+		options.destination_dir_name = 'irrlicht'
+	if options.destination_dir_name:
+		if not os.path.exists(options.destination_dir_name):
+			os.mkdir(options.destination_dir_name)
+	if options.irrlicht_library_name:
+		irrlicht_library_name = options.irrlicht_library_name
 	if len(args) > 0:
 		if options.help:
 			parser.print_help()

@@ -2,7 +2,8 @@
 
 Type EVENT_METHOD As Function Cdecl (ByVal _event_ As Any Ptr) As UByte
 
-#inclib "../irrlicht_c"
+'#inclib "../irrlicht_c"'use if library is in top of current place
+#inclib "irrlicht_c_173"
 
 #include once "const.bi"
 
@@ -10,7 +11,7 @@ Extern "c"
 
 	Extern _IRR_WCHAR_FILESYSTEM Alias "IRR_WCHAR_FILESYSTEM" As Integer
 
-#if _IRR_WCHAR_FILESYSTEM
+#ifdef _IRR_WCHAR_FILESYSTEM
 	Type fschar As WString Ptr
 #else
 	Type fschar As ZString Ptr
@@ -73,7 +74,9 @@ Extern "c"
 	Declare Sub ILightSceneNode_enableCastShadow(ByVal _pointer_ As Any Ptr, ByVal shadow As UByte)
 	Declare Function ILightSceneNode_getCastShadow(ByVal _pointer_ As Any Ptr) As UByte
 	Declare Function ISceneCollisionManager_getCollisionPoint(ByVal _pointer_ As Any Ptr, ByVal ray As Any Ptr, ByVal selector As Any Ptr, ByVal outCollisionPoint As Any Ptr, ByVal outTriangle As Any Ptr, ByVal outNode As Any Ptr) As UByte
+	'Declare Function ISceneCollisionManager_getCollisionPoint(ByVal _pointer_ As Any Ptr, ByVal ray As Any Ptr, ByVal selector As Any Ptr, ByVal outCollisionPoint As Any Ptr, ByVal outTriangle As Any Ptr, ByVal outNode As Any Ptr) As UByte
 	Declare Function ISceneCollisionManager_getCollisionResultPosition(ByVal _pointer_ As Any Ptr, ByVal selector As Any Ptr, ByVal ellipsoidPosition As Any Ptr, ByVal ellipsoidRadius As Any Ptr, ByVal ellipsoidDirectionAndSpeed As Any Ptr, ByVal triout As Any Ptr, ByVal hitPosition As Any Ptr, ByVal outFalling As UByte, ByVal outNode As Any Ptr, ByVal slidingSpeed As Single, ByVal gravityDirectionAndSpeed As Any Ptr) As Any Ptr
+	'Declare Function ISceneCollisionManager_getCollisionResultPosition(ByVal _pointer_ As Any Ptr, ByVal selector As Any Ptr, ByVal ellipsoidPosition As Any Ptr, ByVal ellipsoidRadius As Any Ptr, ByVal ellipsoidDirectionAndSpeed As Any Ptr, ByVal triout As Any Ptr, ByVal hitPosition As Any Ptr, ByVal outFalling As UByte, ByVal outNode As Any Ptr, ByVal slidingSpeed As Single, ByVal gravityDirectionAndSpeed As Any Ptr) As Any Ptr
 	Declare Function ISceneCollisionManager_getRayFromScreenCoordinates(ByVal _pointer_ As Any Ptr, ByVal pos As Any Ptr, ByVal camera As Any Ptr) As Any Ptr
 	Declare Function ISceneCollisionManager_getScreenCoordinatesFrom3DPosition(ByVal _pointer_ As Any Ptr, ByVal pos As Any Ptr, ByVal camera As Any Ptr) As Any Ptr
 	Declare Function ISceneCollisionManager_getSceneNodeFromScreenCoordinatesBB(ByVal _pointer_ As Any Ptr, ByVal pos As Any Ptr, ByVal idBitMask As Integer, ByVal bNoDebugObjects As UByte, ByVal root As Any Ptr) As Any Ptr
@@ -414,6 +417,7 @@ Extern "c"
 	Declare Function position2di_ctor2(ByVal n As Integer) As Any Ptr
 	Declare Function position2di_ctor3(ByVal other As Any Ptr) As Any Ptr
 	Declare Function position2di_ctor4(ByVal other As Any Ptr) As Any Ptr
+	Declare Function IOSOperator_getOperatingSystemVersion(ByVal _pointer_ As Any Ptr) As ZString Ptr
 	Declare Function IOSOperator_getOperationSystemVersion(ByVal _pointer_ As Any Ptr) As WString Ptr
 	Declare Sub IOSOperator_copyToClipboard(ByVal _pointer_ As Any Ptr, ByVal text As WString Ptr)
 	Declare Function IOSOperator_getTextFromClipboard(ByVal _pointer_ As Any Ptr) As WString Ptr
@@ -597,6 +601,8 @@ Extern "c"
 	Declare Function ISceneNode_getAbsolutePosition(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Sub ISceneNode_setAutomaticCulling(ByVal _pointer_ As Any Ptr, ByVal state As E_CULLING_TYPE)
 	Declare Function ISceneNode_getAutomaticCulling(ByVal _pointer_ As Any Ptr) As E_CULLING_TYPE
+	'Declare Sub ISceneNode_setAutomaticCulling(ByVal _pointer_ As Any Ptr, ByVal state As UInteger)
+	'Declare Function ISceneNode_getAutomaticCulling(ByVal _pointer_ As Any Ptr) As UInteger
 	Declare Sub ISceneNode_setDebugDataVisible(ByVal _pointer_ As Any Ptr, ByVal state As Integer)
 	Declare Function ISceneNode_isDebugDataVisible(ByVal _pointer_ As Any Ptr) As Integer
 	Declare Sub ISceneNode_setIsDebugObject(ByVal _pointer_ As Any Ptr, ByVal debugObject As UByte)
@@ -998,6 +1004,9 @@ Extern "c"
 	Declare Function IrrlichtDevice_getVideoModeList(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Function IrrlichtDevice_getOSOperator(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Function IrrlichtDevice_getTimer(ByVal _pointer_ As Any Ptr) As Any Ptr
+	Declare Function IrrlichtDevice_getRandomizer(ByVal _pointer_ As Any Ptr) As Any Ptr
+	Declare Sub IrrlichtDevice_setRandomizer(ByVal _pointer_ As Any Ptr, ByVal r As Any Ptr)
+	Declare Function IrrlichtDevice_createDefaultRandomizer(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Sub IrrlichtDevice_setWindowCaption(ByVal _pointer_ As Any Ptr, ByVal text As WString Ptr)
 	Declare Function IrrlichtDevice_isWindowActive(ByVal _pointer_ As Any Ptr) As UByte
 	Declare Function IrrlichtDevice_isWindowFocused(ByVal _pointer_ As Any Ptr) As UByte
@@ -1017,6 +1026,7 @@ Extern "c"
 	Declare Function IrrlichtDevice_activateJoysticks(ByVal _pointer_ As Any Ptr, ByVal joystickInfo As Any Ptr) As UByte
 	Declare Function IrrlichtDevice_setGammaRamp(ByVal _pointer_ As Any Ptr, ByVal red As Single, ByVal green As Single, ByVal blue As Single, ByVal relativebrightness As Single, ByVal relativecontrast As Single) As UByte
 	Declare Function IrrlichtDevice_getGammaRamp(ByVal _pointer_ As Any Ptr, ByVal red As Single, ByVal green As Single, ByVal blue As Single, ByVal brightness As Single, ByVal contrast As Single) As UByte
+	Declare Sub IrrlichtDevice_clearSystemMessages(ByVal _pointer_ As Any Ptr)
 	Declare Function IrrlichtDevice_getType(ByVal _pointer_ As Any Ptr) As E_DEVICE_TYPE
 	Declare Function IrrlichtDevice_isDriverSupported(ByVal _pointer_ As Any Ptr, ByVal driver As E_DRIVER_TYPE) As UByte
 	Declare Function IFileSystem_createAndOpenFile(ByVal _pointer_ As Any Ptr, ByVal filename As fschar) As Any Ptr
@@ -1083,6 +1093,7 @@ Extern "c"
 	Declare Function IGUIEnvironment_addTreeView(ByVal _pointer_ As Any Ptr, ByVal rectangle As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal _draw_Background As UByte, ByVal scrollBarVertical As UByte, ByVal scrollBarHorizontal As UByte) As Any Ptr
 	Declare Function IGUIEnvironment_addMeshViewer(ByVal _pointer_ As Any Ptr, ByVal rectangle As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal text As WString Ptr) As Any Ptr
 	Declare Function IGUIEnvironment_addFileOpenDialog(ByVal _pointer_ As Any Ptr, ByVal title As WString Ptr, ByVal _mod_al As UByte, ByVal parent As Any Ptr, ByVal id As Integer) As Any Ptr
+	'Declare Function IGUIEnvironment_addFileOpenDialog(ByVal _pointer_ As Any Ptr, ByVal title As WString Ptr, ByVal _mod_al As UByte, ByVal parent As Any Ptr, ByVal id As Integer, ByVal restoreCWD As UByte, ByVal startDir As Any Ptr) As Any Ptr
 	Declare Function IGUIEnvironment_addColorSelectDialog(ByVal _pointer_ As Any Ptr, ByVal title As WString Ptr, ByVal _mod_al As UByte, ByVal parent As Any Ptr, ByVal id As Integer) As Any Ptr
 	Declare Function IGUIEnvironment_addStaticText(ByVal _pointer_ As Any Ptr, ByVal text As WString Ptr, ByVal rectangle As Any Ptr, ByVal border As UByte, ByVal wordWrap As UByte, ByVal parent As Any Ptr, ByVal id As Integer, ByVal fillBackground As UByte) As Any Ptr
 	Declare Function IGUIEnvironment_addEditBox(ByVal _pointer_ As Any Ptr, ByVal text As WString Ptr, ByVal rectangle As Any Ptr, ByVal border As UByte, ByVal parent As Any Ptr, ByVal id As Integer) As Any Ptr
@@ -1109,6 +1120,7 @@ Extern "c"
 	Declare Sub IGUIEnvironment_writeGUIElement(ByVal _pointer_ As Any Ptr, ByVal writer As Any Ptr, ByVal node As Any Ptr)
 	Declare Sub IGUIEnvironment_readGUIElement(ByVal _pointer_ As Any Ptr, ByVal reader As Any Ptr, ByVal node As Any Ptr)
 	Declare Function IGUIEnvironment_getTTFont(ByVal _pointer_ As Any Ptr, ByVal filename As ZString Ptr, ByVal fontsize As UInteger, ByVal antialias As UByte, ByVal transparency As UByte) As Any Ptr
+	Declare Function IGUIEnvironment_addFileSelectorDialog(ByVal _pointer_ As Any Ptr, ByVal title As WString Ptr, ByVal _mod_al As UByte, ByVal parent As Any Ptr, ByVal id As Integer, ByVal rectangle As Any Ptr, ByVal _type_ As E_FILESELECTOR_TYPE) As Any Ptr
 	Declare Function ISceneManager_getMesh(ByVal _pointer_ As Any Ptr, ByVal filename As fschar) As Any Ptr
 	Declare Function ISceneManager_getMesh2(ByVal _pointer_ As Any Ptr, ByVal file As Any Ptr) As Any Ptr
 	Declare Function ISceneManager_getMeshCache(ByVal _pointer_ As Any Ptr) As Any Ptr
@@ -1118,16 +1130,18 @@ Extern "c"
 	Declare Function ISceneManager_addVolumeLightSceneNode(ByVal _pointer_ As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal subdivU As UInteger, ByVal subdivV As UInteger, ByVal foot As Any Ptr, ByVal tail As Any Ptr, ByVal position As Any Ptr, ByVal rotation As Any Ptr, ByVal scale As Any Ptr) As Any Ptr
 	Declare Function ISceneManager_addCubeSceneNode(ByVal _pointer_ As Any Ptr, ByVal _size_ As Single, ByVal parent As Any Ptr, ByVal id As Integer, ByVal position As Any Ptr, ByVal rotation As Any Ptr, ByVal scale As Any Ptr) As Any Ptr
 	Declare Function ISceneManager_addSphereSceneNode(ByVal _pointer_ As Any Ptr, ByVal radius As Single, ByVal polyCount As Integer, ByVal parent As Any Ptr, ByVal id As Integer, ByVal position As Any Ptr, ByVal rotation As Any Ptr, ByVal scale As Any Ptr) As Any Ptr
-	Declare Function ISceneManager_addAnimatedMeshSceneNode(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal position As Any Ptr, ByVal rotation As Any Ptr, ByVal scale As Any Ptr, ByVal alsoAddIfMeshPointerZero As UByte) As Any Ptr
+	Declare Function ISceneManager_addAnimatedMeshSceneNode1(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal position As Any Ptr, ByVal rotation As Any Ptr, ByVal scale As Any Ptr, ByVal alsoAddIfMeshPointerZero As UByte) As Any Ptr
 	Declare Function ISceneManager_addAnimatedMeshSceneNode2(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr) As Any Ptr
 	Declare Function ISceneManager_addMeshSceneNode(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal position As Any Ptr, ByVal rotation As Any Ptr, ByVal scale As Any Ptr, ByVal alsoAddIfMeshPointerZero As UByte) As Any Ptr
 	Declare Function ISceneManager_addWaterSurfaceSceneNode(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal waveHeight As Single, ByVal waveSpeed As Single, ByVal waveLength As Single, ByVal parent As Any Ptr, ByVal id As Integer, ByVal position As Any Ptr, ByVal rotation As Any Ptr, ByVal scale As Any Ptr) As Any Ptr
-	Declare Function ISceneManager_addOctTreeSceneNode(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal minimalPolysPerNode As Integer, ByVal alsoAddIfMeshPointerZero As UByte) As Any Ptr
+	Declare Function ISceneManager_addOctTreeSceneNode1(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal minimalPolysPerNode As Integer, ByVal alsoAddIfMeshPointerZero As UByte) As Any Ptr
 	Declare Function ISceneManager_addOctTreeSceneNode2(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal minimalPolysPerNode As Integer, ByVal alsoAddIfMeshPointerZero As UByte) As Any Ptr
-	Declare Function ISceneManager_addOctreeSceneNode(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal minimalPolysPerNode As Integer, ByVal alsoAddIfMeshPointerZero As UByte) As Any Ptr
-	Declare Function ISceneManager_addOctreeSceneNode2(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal minimalPolysPerNode As Integer, ByVal alsoAddIfMeshPointerZero As UByte) As Any Ptr
-	Declare Function ISceneManager_addCameraSceneNode(ByVal _pointer_ As Any Ptr, ByVal parent As Any Ptr, ByVal position As Any Ptr, ByVal lookat As Any Ptr, ByVal id As Integer) As Any Ptr
 	Declare Function ISceneManager_addCameraSceneNodeMaya(ByVal _pointer_ As Any Ptr, ByVal parent As Any Ptr, ByVal rotateSpeed As Single, ByVal zoomSpeed As Single, ByVal translationSpeed As Single, ByVal id As Integer) As Any Ptr
+	Declare Function ISceneManager_createOctTreeTriangleSelector(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal node As Any Ptr, ByVal minimalPolysPerNode As Integer) As Any Ptr
+	'Declare Function ISceneManager_addCameraSceneNodeMaya(ByVal _pointer_ As Any Ptr, ByVal parent As Any Ptr, ByVal rotateSpeed As Single, ByVal zoomSpeed As Single, ByVal translationSpeed As Single, ByVal id As Integer, ByVal distance As Single, ByVal makeActive As UByte) As Any Ptr
+	Declare Function ISceneManager_addOctreeSceneNode1(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal minimalPolysPerNode As Integer, ByVal alsoAddIfMeshPointerZero As UByte) As Any Ptr
+	Declare Function ISceneManager_addOctreeSceneNode2(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal minimalPolysPerNode As Integer, ByVal alsoAddIfMeshPointerZero As UByte) As Any Ptr
+	Declare Function ISceneManager_addCameraSceneNode(ByVal _pointer_ As Any Ptr, ByVal parent As Any Ptr, ByVal position As Any Ptr, ByVal lookat As Any Ptr, ByVal id As Integer, ByVal makeActive As UByte) As Any Ptr
 	Declare Function ISceneManager_addCameraSceneNodeFPS(ByVal _pointer_ As Any Ptr, ByVal parent As Any Ptr, ByVal rotateSpeed As Single, ByVal moveSpeed As Single, ByVal id As Integer, ByVal keyMapArray As Any Ptr, ByVal keyMapSize As Integer, ByVal noVerticalMovement As UByte, ByVal jumpSpeed As Single, ByVal invertMouse As UByte) As Any Ptr
 	Declare Function ISceneManager_addCameraSceneNodeFPS2(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Function ISceneManager_addLightSceneNode(ByVal _pointer_ As Any Ptr, ByVal parent As Any Ptr, ByVal position As Any Ptr, ByVal _color_ As Any Ptr, ByVal radius As Single, ByVal id As Integer) As Any Ptr
@@ -1142,11 +1156,11 @@ Extern "c"
 	Declare Function ISceneManager_addDummyTransformationSceneNode(ByVal _pointer_ As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer) As Any Ptr
 	Declare Function ISceneManager_addTextSceneNode(ByVal _pointer_ As Any Ptr, ByVal font As Any Ptr, ByVal text As WString Ptr, ByVal _color_ As Any Ptr, ByVal parent As Any Ptr, ByVal position As Any Ptr, ByVal id As Integer) As Any Ptr
 	Declare Function ISceneManager_addBillboardTextSceneNode(ByVal _pointer_ As Any Ptr, ByVal font As Any Ptr, ByVal text As WString Ptr, ByVal parent As Any Ptr, ByVal _size_ As Any Ptr, ByVal position As Any Ptr, ByVal id As Integer, ByVal _color_Top As Any Ptr, ByVal _color_Bottom As Any Ptr) As Any Ptr
-	Declare Function ISceneManager_addHillPlaneMesh(ByVal _pointer_ As Any Ptr, ByVal _name_ As ZString Ptr, ByVal tileSize As Any Ptr, ByVal tileCount As Any Ptr, ByVal material As Any Ptr, ByVal hillHeight As Single, ByVal countHills As Any Ptr, ByVal textureRepeatCount As Any Ptr) As Any Ptr
-	Declare Function ISceneManager_addTerrainMesh(ByVal _pointer_ As Any Ptr, ByVal meshname As ZString Ptr, ByVal texture As Any Ptr, ByVal heightmap As Any Ptr, ByVal stretchSize As Any Ptr, ByVal maxHeight As Single, ByVal defaultVertexBlockSize As Any Ptr) As Any Ptr
-	Declare Function ISceneManager_addArrowMesh(ByVal _pointer_ As Any Ptr, ByVal _name_ As ZString Ptr, ByVal vtxColor0 As Any Ptr, ByVal vtxColor1 As Any Ptr, ByVal tesselationCylinder As UInteger, ByVal tesselationCone As UInteger, ByVal height As Single, ByVal cylinderHeight As Single, ByVal _width_0 As Single, ByVal _width_1 As Single) As Any Ptr
-	Declare Function ISceneManager_addSphereMesh(ByVal _pointer_ As Any Ptr, ByVal _name_ As ZString Ptr, ByVal radius As Single, ByVal polyCountX As UInteger, ByVal polyCountY As UInteger) As Any Ptr
-	Declare Function ISceneManager_addVolumeLightMesh(ByVal _pointer_ As Any Ptr, ByVal _name_ As ZString Ptr, ByVal SubdivideU As UInteger, ByVal SubdivideV As UInteger, ByVal FootColor As Any Ptr, ByVal TailColor As Any Ptr) As Any Ptr
+	Declare Function ISceneManager_addHillPlaneMesh(ByVal _pointer_ As Any Ptr, ByVal _name_ As fschar, ByVal tileSize As Any Ptr, ByVal tileCount As Any Ptr, ByVal material As Any Ptr, ByVal hillHeight As Single, ByVal countHills As Any Ptr, ByVal textureRepeatCount As Any Ptr) As Any Ptr
+	Declare Function ISceneManager_addTerrainMesh(ByVal _pointer_ As Any Ptr, ByVal meshname As fschar, ByVal texture As Any Ptr, ByVal heightmap As Any Ptr, ByVal stretchSize As Any Ptr, ByVal maxHeight As Single, ByVal defaultVertexBlockSize As Any Ptr) As Any Ptr
+	Declare Function ISceneManager_addArrowMesh(ByVal _pointer_ As Any Ptr, ByVal _name_ As fschar, ByVal vtxColorCylinder As Any Ptr, ByVal vtxColorCone As Any Ptr, ByVal tesselationCylinder As UInteger, ByVal tesselationCone As UInteger, ByVal height As Single, ByVal cylinderHeight As Single, ByVal _width_Cylinder As Single, ByVal _width_Cone As Single) As Any Ptr
+	Declare Function ISceneManager_addSphereMesh(ByVal _pointer_ As Any Ptr, ByVal _name_ As fschar, ByVal radius As Single, ByVal polyCountX As UInteger, ByVal polyCountY As UInteger) As Any Ptr
+	Declare Function ISceneManager_addVolumeLightMesh(ByVal _pointer_ As Any Ptr, ByVal _name_ As fschar, ByVal SubdivideU As UInteger, ByVal SubdivideV As UInteger, ByVal FootColor As Any Ptr, ByVal TailColor As Any Ptr) As Any Ptr
 	Declare Function ISceneManager_getRootSceneNode(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Function ISceneManager_getSceneNodeFromId(ByVal _pointer_ As Any Ptr, ByVal id As Integer, ByVal start As Any Ptr) As Any Ptr
 	Declare Function ISceneManager_getSceneNodeFromName(ByVal _pointer_ As Any Ptr, ByVal _name_ As ZString Ptr, ByVal start As Any Ptr) As Any Ptr
@@ -1168,7 +1182,6 @@ Extern "c"
 	Declare Function ISceneManager_createTriangleSelector1(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal node As Any Ptr) As Any Ptr
 	Declare Function ISceneManager_createTriangleSelector2(ByVal _pointer_ As Any Ptr, ByVal node As Any Ptr) As Any Ptr
 	Declare Function ISceneManager_createTriangleSelectorFromBoundingBox(ByVal _pointer_ As Any Ptr, ByVal node As Any Ptr) As Any Ptr
-	Declare Function ISceneManager_createOctTreeTriangleSelector(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal node As Any Ptr, ByVal minimalPolysPerNode As Integer) As Any Ptr
 	Declare Function ISceneManager_createOctreeTriangleSelector(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal node As Any Ptr, ByVal minimalPolysPerNode As Integer) As Any Ptr
 	Declare Function ISceneManager_createMetaTriangleSelector(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Function ISceneManager_createTerrainTriangleSelector(ByVal _pointer_ As Any Ptr, ByVal node As Any Ptr, ByVal LOD As Integer) As Any Ptr
@@ -1214,7 +1227,9 @@ Extern "c"
 	Declare Function SOverrideMaterial_get_Enabled(ByVal _pointer_ As Any Ptr) As UByte
 	Declare Sub SOverrideMaterial_set_Enabled(ByVal _pointer_ As Any Ptr, ByVal value As UByte)
 	Declare Function IRenderTarget_ctor1(ByVal texture As Any Ptr, ByVal _color_Mask As E_COLOR_PLANE, ByVal blendFuncSrc As E_BLEND_FACTOR, ByVal blendFuncDst As E_BLEND_FACTOR, ByVal blendEnable As UByte) As Any Ptr
+	'Declare Function IRenderTarget_ctor1(ByVal texture As Any Ptr, ByVal _color_Mask As E_COLOR_PLANE, ByVal blendFuncSrc As E_BLEND_FACTOR, ByVal blendFuncDst As E_BLEND_FACTOR, ByVal blendOp As E_BLEND_OPERATION) As Any Ptr
 	Declare Function IRenderTarget_ctor2(ByVal target As E_RENDER_TARGET, ByVal _color_Mask As E_COLOR_PLANE, ByVal blendFuncSrc As E_BLEND_FACTOR, ByVal blendFuncDst As E_BLEND_FACTOR, ByVal blendEnable As UByte) As Any Ptr
+	'Declare Function IRenderTarget_ctor2(ByVal target As E_RENDER_TARGET, ByVal _color_Mask As E_COLOR_PLANE, ByVal blendFuncSrc As E_BLEND_FACTOR, ByVal blendFuncDst As E_BLEND_FACTOR, ByVal blendOp As E_BLEND_OPERATION) As Any Ptr
 	Declare Function IRenderTarget_get_RenderTexture(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Sub IRenderTarget_set_RenderTexture(ByVal _pointer_ As Any Ptr, ByVal value As Any Ptr)
 	Declare Function IRenderTarget_get_TargetType(ByVal _pointer_ As Any Ptr) As E_RENDER_TARGET
@@ -1227,11 +1242,14 @@ Extern "c"
 	Declare Sub IRenderTarget_set_BlendFuncDst(ByVal _pointer_ As Any Ptr, ByVal value As E_BLEND_FACTOR)
 	Declare Function IRenderTarget_get_BlendEnable(ByVal _pointer_ As Any Ptr) As UByte
 	Declare Sub IRenderTarget_set_BlendEnable(ByVal _pointer_ As Any Ptr, ByVal value As UByte)
+	Declare Function IRenderTarget_get_BlendOp(ByVal _pointer_ As Any Ptr) As E_BLEND_OPERATION
+	Declare Sub IRenderTarget_set_BlendOp(ByVal _pointer_ As Any Ptr, ByVal value As E_BLEND_OPERATION)
 	Declare Function IVideoDriver_beginScene(ByVal _pointer_ As Any Ptr, ByVal backBuffer As UByte, ByVal zBuffer As UByte, ByVal _color_ As Any Ptr, ByVal videoData As Any Ptr, ByVal sourceRect As Any Ptr) As UByte
 	Declare Function IVideoDriver_beginSceneDefault(ByVal _pointer_ As Any Ptr, ByVal backBuffer As UByte, ByVal zBuffer As UByte, ByVal _color_ As Any Ptr) As UByte
 	Declare Function IVideoDriver_endScene(ByVal _pointer_ As Any Ptr) As UByte
 	Declare Function IVideoDriver_queryFeature(ByVal _pointer_ As Any Ptr, ByVal feature As E_VIDEO_DRIVER_FEATURE) As UByte
 	Declare Sub IVideoDriver_disableFeature(ByVal _pointer_ As Any Ptr, ByVal feature As E_VIDEO_DRIVER_FEATURE, ByVal flag As UByte)
+	Declare Function IVideoDriver_getDriverAttributes(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Function IVideoDriver_checkDriverReset(ByVal _pointer_ As Any Ptr) As UByte
 	Declare Sub IVideoDriver_setTransform(ByVal _pointer_ As Any Ptr, ByVal state As E_TRANSFORMATION_STATE, ByVal mat As Any Ptr)
 	Declare Function IVideoDriver_getTransform(ByVal _pointer_ As Any Ptr, ByVal state As E_TRANSFORMATION_STATE) As Any Ptr
@@ -1253,20 +1271,28 @@ Extern "c"
 	Declare Sub IVideoDriver_removeAllTextures(ByVal _pointer_ As Any Ptr)
 	Declare Sub IVideoDriver_removeHardwareBuffer(ByVal _pointer_ As Any Ptr, ByVal mb As Any Ptr)
 	Declare Sub IVideoDriver_removeAllHardwareBuffers(ByVal _pointer_ As Any Ptr)
-	Declare Sub IVideoDriver_makeColorKeyTexture(ByVal _pointer_ As Any Ptr, ByVal texture As Any Ptr, ByVal _color_ As Any Ptr, ByVal zeroTexels As UByte)
+	Declare Sub IVideoDriver_addOcclusionQuery(ByVal _pointer_ As Any Ptr, ByVal node As Any Ptr, ByVal mesh As Any Ptr)
+	Declare Sub IVideoDriver_removeOcclusionQuery(ByVal _pointer_ As Any Ptr, ByVal node As Any Ptr)
+	Declare Sub IVideoDriver_removeAllOcclusionQueries(ByVal _pointer_ As Any Ptr)
+	Declare Sub IVideoDriver_runOcclusionQuery(ByVal _pointer_ As Any Ptr, ByVal node As Any Ptr, ByVal visible As UByte)
+	Declare Sub IVideoDriver_runAllOcclusionQueries(ByVal _pointer_ As Any Ptr, ByVal visible As UByte)
+	Declare Sub IVideoDriver_updateOcclusionQuery(ByVal _pointer_ As Any Ptr, ByVal node As Any Ptr, ByVal block As UByte)
+	Declare Sub IVideoDriver_updateAllOcclusionQueries(ByVal _pointer_ As Any Ptr, ByVal block As UByte)
+	Declare Function IVideoDriver_getOcclusionQueryResult(ByVal _pointer_ As Any Ptr, ByVal node As Any Ptr) As UInteger
+	Declare Sub IVideoDriver_makeColorKeyTexture1(ByVal _pointer_ As Any Ptr, ByVal texture As Any Ptr, ByVal _color_ As Any Ptr, ByVal zeroTexels As UByte)
 	Declare Sub IVideoDriver_makeColorKeyTexture2(ByVal _pointer_ As Any Ptr, ByVal texture As Any Ptr, ByVal _color_KeyPixelPos As Any Ptr, ByVal zeroTexels As UByte)
 	Declare Sub IVideoDriver_makeNormalMapTexture(ByVal _pointer_ As Any Ptr, ByVal texture As Any Ptr, ByVal amplitude As Single)
-	Declare Function IVideoDriver_setRenderTarget(ByVal _pointer_ As Any Ptr, ByVal texture As Any Ptr, ByVal clearBackBuffer As UByte, ByVal _clearZBuffer_ As UByte, ByVal _color_ As Any Ptr) As UByte
+	Declare Function IVideoDriver_setRenderTarget1(ByVal _pointer_ As Any Ptr, ByVal texture As Any Ptr, ByVal clearBackBuffer As UByte, ByVal _clearZBuffer_ As UByte, ByVal _color_ As Any Ptr) As UByte
 	Declare Function IVideoDriver_setRenderTarget2(ByVal _pointer_ As Any Ptr, ByVal target As E_RENDER_TARGET, ByVal clearTarget As UByte, ByVal _clearZBuffer_ As UByte, ByVal _color_ As Any Ptr) As UByte
+	Declare Function IVideoDriver_setRenderTarget3(ByVal _pointer_ As Any Ptr, ByVal target As Any Ptr, ByVal clearTarget As UByte, ByVal _clearZBuffer_ As UByte, ByVal _color_ As Any Ptr) As UByte
 	Declare Sub IVideoDriver_setViewPort(ByVal _pointer_ As Any Ptr, ByVal area As Any Ptr)
 	Declare Function IVideoDriver_getViewPort(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Sub IVideoDriver_drawVertexPrimitiveList(ByVal _pointer_ As Any Ptr, ByVal vertices As Any Ptr, ByVal vertexCount As UInteger, ByVal indexList As Any Ptr, ByVal primCount As UInteger, ByVal vType As E_VERTEX_TYPE, ByVal pType As E_PRIMITIVE_TYPE, ByVal iType As E_INDEX_TYPE)
 	Declare Sub IVideoDriver_draw2DVertexPrimitiveList(ByVal _pointer_ As Any Ptr, ByVal vertices As Any Ptr, ByVal vertexCount As UInteger, ByVal indexList As Any Ptr, ByVal primCount As UInteger, ByVal vType As E_VERTEX_TYPE, ByVal pType As E_PRIMITIVE_TYPE, ByVal iType As E_INDEX_TYPE)
-	Declare Sub IVideoDriver_drawIndexedTriangleList(ByVal _pointer_ As Any Ptr, ByVal vertices As Any Ptr, ByVal vertexCount As UInteger, ByVal indexList As Any Ptr, ByVal triangleCount As UInteger)
+	Declare Sub IVideoDriver_drawIndexedTriangleList1(ByVal _pointer_ As Any Ptr, ByVal vertices As Any Ptr, ByVal vertexCount As UInteger, ByVal indexList As Any Ptr, ByVal triangleCount As UInteger)
 	Declare Sub IVideoDriver_drawIndexedTriangleList2(ByVal _pointer_ As Any Ptr, ByVal vertices As Any Ptr, ByVal vertexCount As UInteger, ByVal indexList As Any Ptr, ByVal triangleCount As UInteger)
 	Declare Sub IVideoDriver_drawIndexedTriangleList3(ByVal _pointer_ As Any Ptr, ByVal vertices As Any Ptr, ByVal vertexCount As UInteger, ByVal indexList As Any Ptr, ByVal triangleCount As UInteger)
 	Declare Sub IVideoDriver_drawIndexedTriangleFan(ByVal _pointer_ As Any Ptr, ByVal vertices As Any Ptr, ByVal vertexCount As UInteger, ByVal indexList As Any Ptr, ByVal triangleCount As UInteger)
-	Declare Sub IVideoDriver_drawIndexedTriangleFan2(ByVal _pointer_ As Any Ptr, ByVal vertices As Any Ptr, ByVal vertexCount As UInteger, ByVal indexList As Any Ptr, ByVal triangleCount As UInteger)
 	Declare Sub IVideoDriver_draw3DLine(ByVal _pointer_ As Any Ptr, ByVal start As Any Ptr, ByVal _end_ As Any Ptr, ByVal _color_ As Any Ptr)
 	Declare Sub IVideoDriver_draw3DTriangle(ByVal _pointer_ As Any Ptr, ByVal triangle As Any Ptr, ByVal _color_ As Any Ptr)
 	Declare Sub IVideoDriver_draw3DBox(ByVal _pointer_ As Any Ptr, ByVal box As Any Ptr, ByVal _color_ As Any Ptr)
@@ -1281,10 +1307,12 @@ Extern "c"
 	Declare Sub IVideoDriver_draw2DLine(ByVal _pointer_ As Any Ptr, ByVal start As Any Ptr, ByVal _end_ As Any Ptr, ByVal _color_ As Any Ptr)
 	Declare Sub IVideoDriver_drawPixel(ByVal _pointer_ As Any Ptr, ByVal x As UInteger, ByVal y As UInteger, ByVal _color_ As Any Ptr)
 	Declare Sub IVideoDriver_draw2DPolygon(ByVal _pointer_ As Any Ptr, ByVal center As Any Ptr, ByVal radius As Single, ByVal _color_ As Any Ptr, ByVal vertexCount As Integer)
-	Declare Sub IVideoDriver_drawStencilShadowVolume(ByVal _pointer_ As Any Ptr, ByVal triangles As Any Ptr, ByVal count As Integer, ByVal zfail As UByte)
+	Declare Sub IVideoDriver_drawStencilShadowVolume(ByVal _pointer_ As Any Ptr, ByVal triangles As Any Ptr, ByVal zfail As UByte, ByVal debugDataVisible As UInteger)
+	'Declare Sub IVideoDriver_drawStencilShadowVolume(ByVal _pointer_ As Any Ptr, ByVal triangles As Any Ptr, ByVal count As Integer, ByVal zfail As UByte)
 	Declare Sub IVideoDriver_drawStencilShadow(ByVal _pointer_ As Any Ptr, ByVal clearStencilBuffer As UByte, ByVal leftUpEdge As Any Ptr, ByVal rightUpEdge As Any Ptr, ByVal leftDownEdge As Any Ptr, ByVal rightDownEdge As Any Ptr)
 	Declare Sub IVideoDriver_drawMeshBuffer(ByVal _pointer_ As Any Ptr, ByVal mb As Any Ptr)
 	Declare Sub IVideoDriver_setFog(ByVal _pointer_ As Any Ptr, ByVal _color_ As Any Ptr, ByVal fogType As E_FOG_TYPE, ByVal start As Single, ByVal _end_ As Single, ByVal density As Single, ByVal pixelFog As UByte, ByVal rangeFog As UByte)
+	Declare Sub IVideoDriver_getFog(ByVal _pointer_ As Any Ptr, ByVal _color_ As Any Ptr, ByVal fogType As E_FOG_TYPE, ByVal start As Single, ByVal _end_ As Single, ByVal density As Single, ByVal pixelFog As UByte, ByVal rangeFog As UByte)
 	Declare Function IVideoDriver_getColorFormat(ByVal _pointer_ As Any Ptr) As ECOLOR_FORMAT
 	Declare Function IVideoDriver_getScreenSize(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Function IVideoDriver_getCurrentRenderTargetSize(ByVal _pointer_ As Any Ptr) As Any Ptr
@@ -1339,6 +1367,16 @@ Extern "c"
 	Declare Function IVideoDriver_GetHandle(ByVal _pointer_ As Any Ptr) As Any Ptr
 	'Declare Function IVideoDriver_GetHandle(ByVal _pointer_ As Any Ptr) As ULong
 	Declare Sub IVideoDriver_SetIcon(ByVal _pointer_ As Any Ptr, ByVal icon_id As Integer, ByVal big_icon As UByte)
+	Declare Sub IVideoDriver_draw2DRectangle_f1(ByVal _pointer_ As Any Ptr, ByVal _color_ As Any Ptr, ByVal pos_x1 As Single, ByVal pos_y1 As Single, ByVal pos_x2 As Single, ByVal pos_y2 As Single)
+	Declare Sub IVideoDriver_draw2DRectangle_f2(ByVal _pointer_ As Any Ptr, ByVal _color_ As Any Ptr, ByVal pos_x1 As Single, ByVal pos_y1 As Single, ByVal pos_x2 As Single, ByVal pos_y2 As Single, ByVal clip_x1 As Single, ByVal clip_y1 As Single, ByVal clip_x2 As Single, ByVal clip_y2 As Single)
+	Declare Sub IVideoDriver_draw2DRectangle_f3(ByVal _pointer_ As Any Ptr, ByVal pos_x1 As Single, ByVal pos_y1 As Single, ByVal pos_x2 As Single, ByVal pos_y2 As Single, ByVal _color_LeftUp As Any Ptr, ByVal _color_RightUp As Any Ptr, ByVal _color_LeftDown As Any Ptr, ByVal _color_RightDown As Any Ptr)
+	Declare Sub IVideoDriver_draw2DRectangle_f4(ByVal _pointer_ As Any Ptr, ByVal pos_x1 As Single, ByVal pos_y1 As Single, ByVal pos_x2 As Single, ByVal pos_y2 As Single, ByVal _color_LeftUp As Any Ptr, ByVal _color_RightUp As Any Ptr, ByVal _color_LeftDown As Any Ptr, ByVal _color_RightDown As Any Ptr, ByVal clip_x1 As Single, ByVal clip_y1 As Single, ByVal clip_x2 As Single, ByVal clip_y2 As Single)
+	Declare Sub IVideoDriver_draw2DRectangleOutline_f(ByVal _pointer_ As Any Ptr, ByVal x1 As Single, ByVal y1 As Single, ByVal x2 As Single, ByVal y2 As Single, ByVal _color_ As Any Ptr)
+	Declare Sub IVideoDriver_draw2DLine_f(ByVal _pointer_ As Any Ptr, ByVal start_x As Single, ByVal start_y As Single, ByVal _end__x As Single, ByVal _end__y As Single, ByVal _color_ As Any Ptr)
+	Declare Sub IVideoDriver_drawPixel_f(ByVal _pointer_ As Any Ptr, ByVal x As Single, ByVal y As Single, ByVal _color_ As Any Ptr)
+	Declare Sub IVideoDriver_draw2DPolygon_f(ByVal _pointer_ As Any Ptr, ByVal center_x As Single, ByVal center_y As Single, ByVal radius As Single, ByVal _color_ As Any Ptr, ByVal vertexCount As Integer)
+	Declare Sub IVideoDriver_draw2DLineW(ByVal _pointer_ As Any Ptr, ByVal start As Any Ptr, ByVal _end_ As Any Ptr, ByVal _color_ As Any Ptr, ByVal _width_ As Integer)
+	Declare Sub IVideoDriver_draw2DLineWf(ByVal _pointer_ As Any Ptr, ByVal x1 As Single, ByVal y1 As Single, ByVal x2 As Single, ByVal y2 As Single, ByVal _color_ As Any Ptr, ByVal _width_ As Integer)
 	Declare Sub ICursorControl_setVisible(ByVal _pointer_ As Any Ptr, ByVal visible As UByte)
 	Declare Function ICursorControl_isVisible(ByVal _pointer_ As Any Ptr) As UByte
 	Declare Sub ICursorControl_setPositionF(ByVal _pointer_ As Any Ptr, ByVal pos As Any Ptr)
@@ -1361,8 +1399,6 @@ Extern "c"
 	Declare Function IAnimatedMeshSceneNode_getJointNode1(ByVal _pointer_ As Any Ptr, ByVal jointName As ZString Ptr) As Any Ptr
 	Declare Function IAnimatedMeshSceneNode_getJointNode2(ByVal _pointer_ As Any Ptr, ByVal jointID As UInteger) As Any Ptr
 	Declare Function IAnimatedMeshSceneNode_getJointCount(ByVal _pointer_ As Any Ptr) As UInteger
-	Declare Function IAnimatedMeshSceneNode_getMS3DJointNode(ByVal _pointer_ As Any Ptr, ByVal jointName As ZString Ptr) As Any Ptr
-	Declare Function IAnimatedMeshSceneNode_getXJointNode(ByVal _pointer_ As Any Ptr, ByVal jointName As ZString Ptr) As Any Ptr
 	Declare Function IAnimatedMeshSceneNode_setMD2Animation1(ByVal _pointer_ As Any Ptr, ByVal anim As EMD2_ANIMATION_TYPE) As UByte
 	Declare Function IAnimatedMeshSceneNode_setMD2Animation2(ByVal _pointer_ As Any Ptr, ByVal animationName As ZString Ptr) As UByte
 	Declare Function IAnimatedMeshSceneNode_getFrameNr(ByVal _pointer_ As Any Ptr) As Single
@@ -1390,6 +1426,7 @@ Extern "c"
 	Declare Function IAnimatedMesh_getMesh(ByVal _pointer_ As Any Ptr, ByVal frame As Integer, ByVal detailLevel As Integer, ByVal startFrameLoop As Integer, ByVal _end_FrameLoop As Integer) As Any Ptr
 	Declare Function IAnimatedMesh_getMeshType(ByVal _pointer_ As Any Ptr) As E_ANIMATED_MESH_TYPE
 	Declare Function ITimer_getRealTime(ByVal _pointer_ As Any Ptr) As UInteger
+	Declare Function ITimer_getRealTimeAndDate(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Function ITimer_getTime(ByVal _pointer_ As Any Ptr) As UInteger
 	Declare Sub ITimer_setTime(ByVal _pointer_ As Any Ptr, ByVal time As UInteger)
 	Declare Sub ITimer_stop(ByVal _pointer_ As Any Ptr)
@@ -1552,6 +1589,7 @@ Extern "c"
 	Declare Function ISceneNodeAnimator_hasFinished(ByVal _pointer_ As Any Ptr) As UByte
 	Declare Function ISceneNodeAnimator_set_func_event(ByVal _pointer_ As Any Ptr, ByVal _On_EventMethodSEvent As Any Ptr) As UByte
 	Declare Function ITexture_lock(ByVal _pointer_ As Any Ptr, ByVal readOnly As UByte, ByVal mipmapLevel As UInteger) As Any Ptr
+	'Declare Function ITexture_lock(ByVal _pointer_ As Any Ptr, ByVal _mod_e As E_TEXTURE_LOCK_MODE, ByVal mipmapLevel As UInteger) As Any Ptr
 	Declare Sub ITexture_unlock(ByVal _pointer_ As Any Ptr)
 	Declare Function ITexture_getOriginalSize(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Function ITexture_getSize(ByVal _pointer_ As Any Ptr) As Any Ptr
@@ -1562,7 +1600,8 @@ Extern "c"
 	Declare Function ITexture_hasAlpha(ByVal _pointer_ As Any Ptr) As UByte
 	Declare Sub ITexture_regenerateMipMapLevels(ByVal _pointer_ As Any Ptr)
 	Declare Function ITexture_isRenderTarget(ByVal _pointer_ As Any Ptr) As UByte
-	Declare Function ITexture_getName(ByVal _pointer_ As Any Ptr) As ZString Ptr
+	Declare Function ITexture_getName(ByVal _pointer_ As Any Ptr) As fschar
+	'Declare Function ITexture_getName(ByVal _pointer_ As Any Ptr) As fschar
 	Declare Function ITriangleSelector_getTriangleCount(ByVal _pointer_ As Any Ptr) As Integer
 	Declare Sub ITriangleSelector_getTriangles(ByVal _pointer_ As Any Ptr, ByVal triangles As Any Ptr, ByVal arraySize As Integer, ByVal outTriangleCount As Integer, ByVal transform As Any Ptr)
 	Declare Sub ITriangleSelector_getTriangles2(ByVal _pointer_ As Any Ptr, ByVal triangles As Any Ptr, ByVal arraySize As Integer, ByVal outTriangleCount As Integer, ByVal box As Any Ptr, ByVal transform As Any Ptr)
@@ -1793,6 +1832,7 @@ Extern "c"
 	Declare Function SColorHSL_ctor(ByVal h As Single, ByVal s As Single, ByVal l As Single) As Any Ptr
 	Declare Sub SColorHSL_fromRGB(ByVal _pointer_ As Any Ptr, ByVal _color_ As Any Ptr)
 	Declare Sub SColorHSL_toRGB(ByVal _pointer_ As Any Ptr, ByVal _color_ As Any Ptr)
+	'Declare Sub SColorHSL_toRGB(ByVal _pointer_ As Any Ptr, ByVal _color_ As Any Ptr)
 	Declare Function SColorHSL_get_Hue(ByVal _pointer_ As Any Ptr) As Single
 	Declare Function SColorHSL_get_Saturation(ByVal _pointer_ As Any Ptr) As Single
 	Declare Function SColorHSL_get_Luminance(ByVal _pointer_ As Any Ptr) As Single
@@ -2151,7 +2191,8 @@ Extern "c"
 	Declare Function IFileList_isDirectory(ByVal _pointer_ As Any Ptr, ByVal index As UInteger) As UByte
 	Declare Function IFileList_findFile(ByVal _pointer_ As Any Ptr, ByVal filename As fschar, ByVal isFolder As UByte) As Integer
 	Declare Function IFileList_getPath(ByVal _pointer_ As Any Ptr) As fschar
-	Declare Function IFileList_addItem(ByVal _pointer_ As Any Ptr, ByVal fullPath As fschar, ByVal _size_ As UInteger, ByVal isDirectory As UByte, ByVal id As UInteger) As UInteger
+	Declare Function IFileList_addItem(ByVal _pointer_ As Any Ptr, ByVal fullPath As fschar, ByVal offset As UInteger, ByVal _size_ As UInteger, ByVal isDirectory As UByte, ByVal id As UInteger) As UInteger
+	'Declare Function IFileList_addItem(ByVal _pointer_ As Any Ptr, ByVal fullPath As fschar, ByVal _size_ As UInteger, ByVal isDirectory As UByte, ByVal id As UInteger) As UInteger
 	Declare Sub IFileList_sort(ByVal _pointer_ As Any Ptr)
 	Declare Function CGUITTFont_ctor(ByVal env As Any Ptr, ByVal filename As fschar, ByVal _size_ As UInteger) As Any Ptr
 	Declare Function CGUITTFont_as_IGUIFont(ByVal font As Any Ptr) As Any Ptr
@@ -2821,8 +2862,10 @@ Extern "c"
 	Declare Function IParticleEmitter_getType(ByVal _pointer_ As Any Ptr) As E_PARTICLE_EMITTER_TYPE
 	Declare Sub IParticleFadeOutAffector_setTargetColor(ByVal _pointer_ As Any Ptr, ByVal targetColor As Any Ptr)
 	Declare Sub IParticleFadeOutAffector_setFadeOutTime(ByVal _pointer_ As Any Ptr, ByVal fadeOutTime As Single)
-	Declare Function IParticleFadeOutAffector_getTargetColor(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Function IParticleFadeOutAffector_getFadeOutTime(ByVal _pointer_ As Any Ptr) As Single
+	'Declare Sub IParticleFadeOutAffector_setFadeOutTime(ByVal _pointer_ As Any Ptr, ByVal fadeOutTime As UInteger)
+	'Declare Function IParticleFadeOutAffector_getFadeOutTime(ByVal _pointer_ As Any Ptr) As UInteger
+	Declare Function IParticleFadeOutAffector_getTargetColor(ByVal _pointer_ As Any Ptr) As Any Ptr
 	Declare Function IParticleFadeOutAffector_getType(ByVal _pointer_ As Any Ptr) As E_PARTICLE_AFFECTOR_TYPE
 	Declare Sub IParticleGravityAffector_setTimeForceLost(ByVal _pointer_ As Any Ptr, ByVal timeForceLost As Single)
 	Declare Sub IParticleGravityAffector_setGravity(ByVal _pointer_ As Any Ptr, ByVal gravity As Any Ptr)
@@ -2883,11 +2926,11 @@ Extern "c"
 	Declare Sub IMeshManipulator_scale1(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal factor As Any Ptr)
 	Declare Sub IMeshManipulator_scale2(ByVal _pointer_ As Any Ptr, ByVal buffer As Any Ptr, ByVal factor As Any Ptr)
 	Declare Sub IMeshManipulator_scaleMesh(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal factor As Any Ptr)
+	Declare Sub IMeshManipulator_transformMesh(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal m As Any Ptr)
 	Declare Sub IMeshManipulator_scaleTCoords1(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal factor As Any Ptr, ByVal level As UInteger)
 	Declare Sub IMeshManipulator_scaleTCoords2(ByVal _pointer_ As Any Ptr, ByVal buffer As Any Ptr, ByVal factor As Any Ptr, ByVal level As UInteger)
 	Declare Sub IMeshManipulator_transform1(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal m As Any Ptr)
 	Declare Sub IMeshManipulator_transform2(ByVal _pointer_ As Any Ptr, ByVal buffer As Any Ptr, ByVal m As Any Ptr)
-	Declare Sub IMeshManipulator_transformMesh(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal m As Any Ptr)
 	Declare Function IMeshManipulator_createMeshCopy(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr) As Any Ptr
 	Declare Sub IMeshManipulator_makePlanarTextureMapping1(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal resolution As Single)
 	Declare Sub IMeshManipulator_makePlanarTextureMapping2(ByVal _pointer_ As Any Ptr, ByVal meshbuffer As Any Ptr, ByVal resolution As Single)
@@ -2900,6 +2943,7 @@ Extern "c"
 	Declare Function IMeshManipulator_getPolyCount1(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr) As Integer
 	Declare Function IMeshManipulator_getPolyCount2(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr) As Integer
 	Declare Function IMeshManipulator_createAnimatedMesh(ByVal _pointer_ As Any Ptr, ByVal mesh As Any Ptr, ByVal _type_ As E_ANIMATED_MESH_TYPE) As Any Ptr
+	Declare Function tool_getVertexPitchFromType(ByVal vertexType As E_VERTEX_TYPE) As UInteger
 	Declare Function S3DVertex_ctor1(ByVal _len_gth As Integer) As Any Ptr
 	Declare Function S3DVertex_ctor2(ByVal x As Single, ByVal y As Single, ByVal z As Single, ByVal nx As Single, ByVal ny As Single, ByVal nz As Single, ByVal c As Any Ptr, ByVal tu As Single, ByVal tv As Single) As Any Ptr
 	Declare Function S3DVertex_ctor3(ByVal pos As Any Ptr, ByVal normal As Any Ptr, ByVal _color_ As Any Ptr, ByVal tcoords As Any Ptr) As Any Ptr
@@ -2917,6 +2961,25 @@ Extern "c"
 	Declare Function S3DVertex_ne(ByVal _pointer_ As Any Ptr, ByVal other As Any Ptr, ByVal index As Integer) As UByte
 	Declare Function S3DVertex_less(ByVal _pointer_ As Any Ptr, ByVal other As Any Ptr, ByVal index As Integer) As UByte
 	Declare Function S3DVertex_getType(ByVal _pointer_ As Any Ptr, ByVal index As Integer) As E_VERTEX_TYPE
+	Declare Function S3DVertex_getInterpolated(ByVal _pointer_ As Any Ptr, ByVal other As Any Ptr, ByVal d As Single, ByVal index As Integer) As Any Ptr
+	Declare Function S3DVertex2TCoords_ctor1(ByVal _len_gth As Integer) As Any Ptr
+	Declare Function S3DVertex2TCoords_ctor2(ByVal x As Single, ByVal y As Single, ByVal z As Single, ByVal c As Any Ptr, ByVal tu As Single, ByVal tv As Single, ByVal tu2 As Single, ByVal tv2 As Single) As Any Ptr
+	Declare Function S3DVertex2TCoords_ctor3(ByVal pos As Any Ptr, ByVal _color_ As Any Ptr, ByVal tcoords As Any Ptr, ByVal tcoords2 As Any Ptr) As Any Ptr
+	Declare Function S3DVertex2TCoords_ctor4(ByVal pos As Any Ptr, ByVal normal As Any Ptr, ByVal _color_ As Any Ptr, ByVal tcoords As Any Ptr, ByVal tcoords2 As Any Ptr) As Any Ptr
+	Declare Function S3DVertex2TCoords_ctor5(ByVal x As Single, ByVal y As Single, ByVal z As Single, ByVal nx As Single, ByVal ny As Single, ByVal nz As Single, ByVal c As Any Ptr, ByVal tu As Single, ByVal tv As Single, ByVal tu2 As Single, ByVal tv2 As Single) As Any Ptr
+	Declare Function S3DVertex2TCoords_ctor6(ByVal x As Single, ByVal y As Single, ByVal z As Single, ByVal nx As Single, ByVal ny As Single, ByVal nz As Single, ByVal c As Any Ptr, ByVal tu As Single, ByVal tv As Single) As Any Ptr
+	Declare Function S3DVertex2TCoords_ctor7(ByVal pos As Any Ptr, ByVal normal As Any Ptr, ByVal _color_ As Any Ptr, ByVal tcoords As Any Ptr) As Any Ptr
+	Declare Function S3DVertex2TCoords_ctor8(ByVal other As Any Ptr) As Any Ptr
+	Declare Function S3DVertex2TCoords_get_TCoords2(ByVal _pointer_ As Any Ptr, ByVal index As Integer) As Any Ptr
+	Declare Sub S3DVertex2TCoords_set_TCoords2(ByVal _pointer_ As Any Ptr, ByVal value As Any Ptr, ByVal index As Integer)
+	Declare Function S3DVertexTangents_ctor1(ByVal _len_gth As Integer) As Any Ptr
+	Declare Function S3DVertexTangents_ctor2(ByVal x As Single, ByVal y As Single, ByVal z As Single, ByVal nx As Single, ByVal ny As Single, ByVal nz As Single, ByVal c As Any Ptr, ByVal tu As Single, ByVal tv As Single, ByVal tanx As Single, ByVal tany As Single, ByVal tanz As Single, ByVal bx As Single, ByVal by As Single, ByVal bz As Single) As Any Ptr
+	Declare Function S3DVertexTangents_ctor3(ByVal pos As Any Ptr, ByVal c As Any Ptr, ByVal tcoords As Any Ptr) As Any Ptr
+	Declare Function S3DVertexTangents_ctor4(ByVal pos As Any Ptr, ByVal normal As Any Ptr, ByVal c As Any Ptr, ByVal tcoords As Any Ptr, ByVal tangent As Any Ptr, ByVal binormal As Any Ptr) As Any Ptr
+	Declare Function S3DVertexTangents_get_Tangent(ByVal _pointer_ As Any Ptr, ByVal index As Integer) As Any Ptr
+	Declare Sub S3DVertexTangents_set_Tangent(ByVal _pointer_ As Any Ptr, ByVal value As Any Ptr, ByVal index As Integer)
+	Declare Function S3DVertexTangents_get_Binormal(ByVal _pointer_ As Any Ptr, ByVal index As Integer) As Any Ptr
+	Declare Sub S3DVertexTangents_set_Binormal(ByVal _pointer_ As Any Ptr, ByVal value As Any Ptr, ByVal index As Integer)
 	Declare Function IImageLoader_isALoadableFileExtension(ByVal _pointer_ As Any Ptr, ByVal filename As fschar) As UByte
 	Declare Function IImageLoader_isALoadableFileFormat(ByVal _pointer_ As Any Ptr, ByVal file As Any Ptr) As UByte
 	Declare Function IImageLoader_loadImage(ByVal _pointer_ As Any Ptr, ByVal file As Any Ptr) As Any Ptr
@@ -3057,6 +3120,19 @@ Extern "c"
 	Declare Sub quaternion_set_Z(ByVal _pointer_ As Any Ptr, ByVal value As Single)
 	Declare Function quaternion_get_W(ByVal _pointer_ As Any Ptr) As Single
 	Declare Sub quaternion_set_W(ByVal _pointer_ As Any Ptr, ByVal value As Single)
+	Declare Function CGUIFileSelector_ctor(ByVal title As WString Ptr, ByVal environment As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer, ByVal _type_ As E_FILESELECTOR_TYPE) As Any Ptr
+	Declare Function CGUIFileSelector_getFileName(ByVal _pointer_ As Any Ptr) As WString Ptr
+	Declare Function CGUIFileSelector_getDirectoryName(ByVal _pointer_ As Any Ptr) As fschar
+	Declare Function CGUIFileSelector_getFileFilter(ByVal _pointer_ As Any Ptr) As WString Ptr
+	Declare Function CGUIFileSelector_getDialogType(ByVal _pointer_ As Any Ptr) As E_FILESELECTOR_TYPE
+	Declare Sub CGUIFileSelector_addFileFilter(ByVal _pointer_ As Any Ptr, ByVal _name_ As WString Ptr, ByVal ext As WString Ptr, ByVal texture As Any Ptr)
+	Declare Sub CGUIFileSelector_setCustomFileIcon(ByVal _pointer_ As Any Ptr, ByVal texture As Any Ptr)
+	Declare Sub CGUIFileSelector_setCustomDirectoryIcon(ByVal _pointer_ As Any Ptr, ByVal texture As Any Ptr)
+	Declare Sub CGUIFileSelector_setDirectoryChoosable(ByVal _pointer_ As Any Ptr, ByVal choosable As UByte)
+	Declare Sub IRandomizer_reset(ByVal _pointer_ As Any Ptr, ByVal value As Integer)
+	Declare Function IRandomizer_rand(ByVal _pointer_ As Any Ptr) As Integer
+	Declare Function IRandomizer_frand(ByVal _pointer_ As Any Ptr) As Single
+	Declare Function IRandomizer_randMax(ByVal _pointer_ As Any Ptr) As Integer
 
 
 End Extern

@@ -2,9 +2,11 @@
 
 @REM \FreeBASIC\fbc.exe -exx -g test.bas
 
-@\FreeBASIC\fbc.exe -s gui test.bas resource.rc
+@REM \FreeBASIC\fbc.exe -s gui test.bas resource.rc
 
-@MOVE /y test.exe ..\
+@\FreeBASIC\fbc.exe test.bas resource.rc
+
+@REM MOVE /y test.exe ..\
 
 @DEL *.obj
 

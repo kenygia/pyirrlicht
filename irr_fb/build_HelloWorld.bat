@@ -1,9 +1,9 @@
 @REM \FreeBASIC\fbc.exe -exx -g HelloWorld.bas
 
-@\FreeBASIC\fbc.exe -s gui HelloWorld.bas resource.rc
+@\FreeBASIC\fbc.exe -s gui HelloWorld.bas HelloWorld.rc
 
-@MOVE /y HelloWorld.exe ..\
+@REM MOVE /y HelloWorld.exe ..\
 
 @DEL *.obj
 
-@PAUSE
+@REM PAUSE

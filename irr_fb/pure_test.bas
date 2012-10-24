@@ -1,4 +1,5 @@
-#inclib "../irrlicht_c"
+'~ #inclib "../irrlicht_c"
+#inclib "irrlicht_c_173"
 
 #define FALSE 0
 #define TRUE 1

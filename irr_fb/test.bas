@@ -51,7 +51,7 @@ Dim driver As IVideoDriver = device.getVideoDriver()
 
 driver.SetIcon(IDI_ICON1)
 
-Dim sm As ISceneManager = device.getSceneManager()
+'~ Dim sm As ISceneManager = device.getSceneManager()
 
 Dim sc As SColor = SColor(255, 100, 100, 140)
 
@@ -60,10 +60,10 @@ device.setEventReceiver(@receiver)
 While device.run()
 	If device.isWindowActive() Then
 		If driver.beginScene(true, true, @sc) Then
-			sm.drawAll()
+			'~ sm.drawAll()
 			driver.endScene()
 		End If
-		device.sleep(50)
+		device.sleep(10)
 	Else
 		device.yield()
 	End If

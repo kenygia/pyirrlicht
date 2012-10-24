@@ -376,11 +376,11 @@ End Function
 
 Type IVideoDriver
 	Declare Constructor(ByVal _pointer_ As Any Ptr)
-	Declare Destructor()
+	'~ Declare Destructor()
 	Declare Function beginScene Overload(ByVal backBuffer As UByte, ByVal zBuffer As UByte, ByVal _color_ As SColor Ptr) As UByte
 	Declare Function beginScene Overload(ByVal backBuffer As UByte, ByVal zBuffer As UByte, ByVal _color_ As SColor Ptr, ByVal videoData As SExposedVideoData Ptr, ByVal sourceRect As recti Ptr = 0) As UByte
 	Declare Function endScene() As UByte
-	Declare Function getTexture(ByVal filename As ZString Ptr) As Any Ptr
+	Declare Function getTexture(ByVal filename As fschar) As Any Ptr
 	Declare Function getExposedVideoData() As SExposedVideoData
 	Declare Sub SetIcon(ByVal icon_id As Integer = 32512, ByVal big_icon As UByte = False)
 	Declare Function getFPS() As Integer
@@ -390,9 +390,9 @@ End Type
 Constructor IVideoDriver(ByVal _pointer_ As Any Ptr)
 	this.c_pointer = _pointer_
 End Constructor
-Destructor IVideoDriver()
+'~ Destructor IVideoDriver()
 	'~ delete_pointer(this.c_pointer)
-End Destructor
+'~ End Destructor
 Function IVideoDriver.beginScene(ByVal backBuffer As UByte, ByVal zBuffer As UByte, ByVal _color_ As SColor Ptr) As UByte
 	Return IVideoDriver_beginSceneDefault(this.c_pointer, backBuffer, zBuffer, _color_)
 End Function
@@ -402,7 +402,7 @@ End Function
 Function IVideoDriver.endScene() As UByte
 	Return IVideoDriver_endScene(this.c_pointer)
 End Function
-Function IVideoDriver.getTexture(ByVal filename As ZString Ptr) As Any Ptr
+Function IVideoDriver.getTexture(ByVal filename As fschar) As Any Ptr
 	Return IVideoDriver_getTexture1(this.c_pointer, filename)
 End Function
 Function IVideoDriver.getExposedVideoData() As SExposedVideoData
@@ -419,32 +419,32 @@ End Function
 
 Type IFileSystem
 	Declare Constructor(ByVal _pointer_ As Any Ptr)
-	Declare Destructor()
+	'~ Declare Destructor()
 	Private:
 		As Any Ptr c_pointer = 0
 End Type
 Constructor IFileSystem(ByVal _pointer_ As Any Ptr)
 	this.c_pointer = _pointer_
 End Constructor
-Destructor IFileSystem()
+'~ Destructor IFileSystem()
 	'~ delete_pointer(this.c_pointer)
-End Destructor
+'~ End Destructor
 
 
 
 Type IGUIEnvironment
 	As Any Ptr c_pointer = 0
 	Declare Constructor(ByVal _pointer_ As Any Ptr)
-	Declare Destructor()
+	'~ Declare Destructor()
 	Declare Sub drawAll()
 	Declare Function addStaticText(ByVal text_value As WString Ptr = 0, ByVal _rectangle_ As Any Ptr = 0, ByVal _border_ As UByte = 0, ByVal _wordWrap_ As UByte = 0, ByVal _parent_ As Any Ptr = 0, ByVal id_value As Integer = -1, ByVal _fillBackground_ As UByte = 0) As Any Ptr
 End Type
 Constructor IGUIEnvironment(ByVal _pointer_ As Any Ptr)
 	this.c_pointer = _pointer_
 End Constructor
-Destructor IGUIEnvironment()
+'~ Destructor IGUIEnvironment()
 	'~ delete_pointer(this.c_pointer)
-End Destructor
+'~ End Destructor
 Sub IGUIEnvironment.drawAll()
 	IGUIEnvironment_drawAll(this.c_pointer)
 End Sub
@@ -457,36 +457,36 @@ End Function
 
 Type ISceneManager
 	Declare Constructor(ByVal _pointer_ As Any Ptr)
-	Declare Destructor()
+	'~ Declare Destructor()
 	Declare Sub drawAll()
-	Declare Function getMesh(ByVal filename As ZString Ptr) As IAnimatedMesh
+	Declare Function getMesh(ByVal filename As fschar) As IAnimatedMesh
 	Declare Function addAnimatedMeshSceneNode(ByVal mesh As Any Ptr) As IAnimatedMeshSceneNode
 	Declare Function addAnimatedMeshSceneNode(ByVal mesh As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer = -1, ByVal position As Any Ptr = 0, ByVal rotation As Any Ptr = 0, ByVal scale As Any Ptr = 0, ByVal alsoAddIfMeshPointerZero As UByte = False) As IAnimatedMeshSceneNode
-	Declare Function addCameraSceneNode(ByVal parent As Any Ptr = 0, ByVal position As Any Ptr = 0, ByVal lookat As Any Ptr = 0, ByVal id As Integer = -1) As Any Ptr
+	Declare Function addCameraSceneNode(ByVal parent As Any Ptr = 0, ByVal position As Any Ptr = 0, ByVal lookat As Any Ptr = 0, ByVal id As Integer = -1, ByVal makeActive As UByte = True) As Any Ptr
 	Private:
 		As Any Ptr c_pointer = 0
 End Type
 Constructor ISceneManager(ByVal _pointer_ As Any Ptr)
 	this.c_pointer = _pointer_
 End Constructor
-Destructor ISceneManager()
+'~ Destructor ISceneManager()
 	'~ delete_pointer(this.c_pointer)
-End Destructor
+'~ End Destructor
 Sub ISceneManager.drawAll()
 	ISceneManager_drawAll(this.c_pointer)
 End Sub
-Function ISceneManager.getMesh(ByVal filename As ZString Ptr) As IAnimatedMesh
+Function ISceneManager.getMesh(ByVal filename As fschar) As IAnimatedMesh
 	Return IAnimatedMesh(ISceneManager_getMesh(this.c_pointer, filename))
 End Function
 Function ISceneManager.addAnimatedMeshSceneNode(ByVal mesh As Any Ptr, ByVal parent As Any Ptr, ByVal id As Integer = -1, ByVal position As Any Ptr = 0, ByVal rotation As Any Ptr = 0, ByVal scale As Any Ptr = 0, ByVal alsoAddIfMeshPointerZero As UByte = False) As IAnimatedMeshSceneNode
-	Return IAnimatedMeshSceneNode(False, ISceneManager_addAnimatedMeshSceneNode(this.c_pointer, mesh, parent, id, position, rotation, scale, alsoAddIfMeshPointerZero))
+	Return IAnimatedMeshSceneNode(False, ISceneManager_addAnimatedMeshSceneNode1(this.c_pointer, mesh, parent, id, position, rotation, scale, alsoAddIfMeshPointerZero))
 End Function
 Function ISceneManager.addAnimatedMeshSceneNode(ByVal mesh As Any Ptr) As IAnimatedMeshSceneNode
 	'~ Return IAnimatedMeshSceneNode(False, ISceneManager_addAnimatedMeshSceneNode(this.c_pointer, mesh, 0, -1, Type<vector3df>(0.0, 0.0, 0.0), Type<vector3df>(0.0, 0.0, 0.0), Type<vector3df>(1.0, 1.0, 1.0), False))
 	Return IAnimatedMeshSceneNode(False, ISceneManager_addAnimatedMeshSceneNode2(this.c_pointer, mesh))
 End Function
-Function ISceneManager.addCameraSceneNode(ByVal parent As Any Ptr = 0, ByVal position As Any Ptr = 0, ByVal lookat As Any Ptr = 0, ByVal id As Integer = -1) As Any Ptr
-	Return ISceneManager_addCameraSceneNode(this.c_pointer, parent, position, lookat, id)
+Function ISceneManager.addCameraSceneNode(ByVal parent As Any Ptr = 0, ByVal position As Any Ptr = 0, ByVal lookat As Any Ptr = 0, ByVal id As Integer = -1, ByVal makeActive As UByte = True) As Any Ptr
+	Return ISceneManager_addCameraSceneNode(this.c_pointer, parent, position, lookat, id, makeActive)
 End Function
 
 
@@ -494,7 +494,7 @@ End Function
 
 Type IrrlichtDevice
 	Declare Constructor(ByVal deviceType As E_DRIVER_TYPE = EDT_SOFTWARE, ByVal windowSize As dimension2du Ptr = 0, ByVal bits As UInteger = 16, ByVal fullscreen As UByte = False, ByVal stencilbuffer As UByte = False, ByVal vsync As UByte = False, ByVal receiver As IEventReceiver Ptr = 0)
-	Declare Destructor()
+	'~ Declare Destructor()
 	Declare Operator Cast() As Any Ptr
 	Declare Function run() As UByte
 	Declare Sub yield()
@@ -514,9 +514,9 @@ End Type
 Constructor IrrlichtDevice(ByVal deviceType As E_DRIVER_TYPE = EDT_SOFTWARE, ByVal windowSize As dimension2du Ptr = 0, ByVal bits As UInteger = 16, ByVal fullscreen As UByte = False, ByVal stencilbuffer As UByte = False, ByVal vsync As UByte = False, ByVal receiver As IEventReceiver Ptr = 0)
 	this.c_pointer = IrrlichtDevice_createDevice(deviceType, windowSize, bits, fullscreen, stencilbuffer, vsync, receiver)
 End Constructor
-Destructor IrrlichtDevice()
+'~ Destructor IrrlichtDevice()
 	'~ delete_pointer(this.c_pointer)
-End Destructor
+'~ End Destructor
 Operator IrrlichtDevice.Cast() As Any Ptr
 	Operator = this.c_pointer
 End Operator

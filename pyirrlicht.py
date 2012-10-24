@@ -13305,7 +13305,7 @@ class ISceneManager(IReferenceCounted):
 	def addAnimatedMeshSceneNode(self, mesh, parent = ISceneNode(0), id = -1, position = vector3df(.0,.0,.0), rotation = vector3df(.0,.0,.0), scale = vector3df(1.0, 1.0, 1.0), alsoAddIfMeshPointerZero = False):
 		if parent in (None, 0):
 			parent = ISceneNode(0)
-		return IAnimatedMeshSceneNode(ISceneManager_addAnimatedMeshSceneNode(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, position.c_pointer, rotation.c_pointer, scale.c_pointer, alsoAddIfMeshPointerZero))
+		return IAnimatedMeshSceneNode(ISceneManager_addAnimatedMeshSceneNode1(self.c_pointer, mesh.c_pointer, parent.c_pointer, id, position.c_pointer, rotation.c_pointer, scale.c_pointer, alsoAddIfMeshPointerZero))
 	def addAnimatedMeshSceneNode2(self, mesh):
 		return IAnimatedMeshSceneNode(ISceneManager_addAnimatedMeshSceneNode2(self.c_pointer, mesh.c_pointer))
 	def addMeshSceneNode(self, mesh, parent = ISceneNode(0), id = -1, position = vector3df(0,0,0), rotation = vector3df(0,0,0), scale = vector3df(1.0, 1.0, 1.0), alsoAddIfMeshPointerZero = False):

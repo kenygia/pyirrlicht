@@ -19,8 +19,9 @@ Dim guienv As IGUIEnvironment = device.getGUIEnvironment()
 guienv.addStaticText("Hello World! This is the Irrlicht Software renderer!", Type<recti>(10,10,260,22), true)
 
 Dim mesh As IAnimatedMesh = smgr.getMesh("media/sydney.md2")
+'~ Dim mesh As IAnimatedMesh = smgr.getMesh(WStr("media/sydney.md2"))
 
-'print"+++ IAnimatedMesh", mesh
+'~ print "+++ IAnimatedMesh", mesh
 
 If mesh Then
 	Dim node As IAnimatedMeshSceneNode = smgr.addAnimatedMeshSceneNode(@mesh)
@@ -45,7 +46,7 @@ While device.run()
 			driver.endScene()
 		End If
 		device.setWindowCaption("Hello World! - Irrlicht Engine Demo   fps = " & Str(driver.getFPS()))
-		device.sleep(50)
+		'~ device.sleep(10)
 	Else
 		device.yield()
 	End If

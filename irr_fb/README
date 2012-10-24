@@ -1,0 +1,15 @@
+pure_test.bas - demonstrate irrlicht_c functional, not require any "bi" includes
+
+const.bi - include with some constants from Irrlicht Engine SDK for FreeBASIC
+
+irrlicht_c.bi - automatic generated include with all irrlicht_c imported functions
+
+irrlicht.bi - include with object oriented implementation Irrlicht Engine SDK for FreeBASIC
+
+HelloWorld.bas - one-to-one demo from Irrlicht Engine SDK, require "irrlicht.bi" include
+
+test.bas - demonstrate IEventReceiver, require "irrlicht.bi" include
+
+class_templates - directory with automatic generated template include files for object oriented programming, not include to SVN, can be found on download page with irrlicht_c_fb archive
+
+h2bi.py - Python script for automatic generation, in future must be replaced with FreeBasic
