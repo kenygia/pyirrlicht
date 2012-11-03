@@ -2,8 +2,8 @@
 # http://pir.sourceforge.net
 # BSD license
 
-__version__ = pyirrlicht_version = '1.1.5'
-__versionTime__ = '2012-10-19'
+__version__ = pyirrlicht_version = '1.1.6'
+__versionTime__ = '2012-11-03'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -260,6 +260,7 @@ EDT_DIRECT3D9 = 4
 EDT_OPENGL = 5
 EDT_COUNT = 6
 
+EEVENT_TYPE = 0
 EET_GUI_EVENT = 0
 EET_MOUSE_INPUT_EVENT = 1
 EET_KEY_INPUT_EVENT = 2
@@ -2416,7 +2417,7 @@ SColorHSL_set_Saturation = func_type(None, ctypes.c_void_p, ctypes.c_float)(('SC
 SColorHSL_set_Luminance = func_type(None, ctypes.c_void_p, ctypes.c_float)(('SColorHSL_set_Luminance', c_module))
 
 # functions for class IReferenceCounted
-IReferenceCounted_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IReferenceCounted_ctor', c_module))
+#~ IReferenceCounted_ctor = func_type(ctypes.c_void_p, ctypes.c_void_p)(('IReferenceCounted_ctor', c_module))
 #~ IReferenceCounted_Destructor = func_type(None, ctypes.c_void_p)(('IReferenceCounted_Destructor', c_module))
 IReferenceCounted_grab = func_type(None, ctypes.c_void_p)(('IReferenceCounted_grab', c_module))
 IReferenceCounted_drop = func_type(ctypes.c_bool, ctypes.c_void_p)(('IReferenceCounted_drop', c_module))
@@ -2672,6 +2673,13 @@ IImage_isRenderTargetOnlyFormat = func_type(ctypes.c_bool, ctypes.c_void_p, ctyp
 IImageLoader_isALoadableFileExtension = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IImageLoader_isALoadableFileExtension', c_module))
 IImageLoader_isALoadableFileFormat = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IImageLoader_isALoadableFileFormat', c_module))
 IImageLoader_loadImage = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('IImageLoader_loadImage', c_module))
+#===== UserImageLoader
+loadImageFunc = func_type(ctypes.c_void_p, ctypes.c_void_p)
+isALoadableFileFormatFunc = func_type(ctypes.c_bool, ctypes.c_void_p)
+isALoadableFileExtensionFunc = func_type(ctypes.c_bool, fschar_t)
+UserImageLoader_ctor1 = func_type(ctypes.c_void_p, loadImageFunc, fschar_t)(('UserImageLoader_ctor1', c_module))
+UserImageLoader_set_extensions = func_type(None, fschar_t, fschar_t, fschar_t)(('UserImageLoader_set_extensions', c_module))
+UserImageLoader_set_funcs = func_type(None, loadImageFunc, isALoadableFileFormatFunc, isALoadableFileExtensionFunc)(('UserImageLoader_set_funcs', c_module))
 
 #=== IImageWriter
 IImageWriter_isAWriteableFileExtension = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('IImageWriter_isAWriteableFileExtension', c_module))
@@ -9748,6 +9756,39 @@ class IImageLoader(IReferenceCounted):
 	def loadImage(self, file):
 		return IImage(IImageLoader_loadImage(self.c_pointer, file.c_pointer))
 
+class UserImageLoader(IImageLoader):
+	def __init__(self, *args, **kwargs):
+		self.c_pointer = None
+		#~ self.delete_c_pointer = True
+		self.callback_loadImage = loadImageFunc(self.loadImage)
+		self.callback_isALoadableFileFormat = isALoadableFileFormatFunc(self.isALoadableFileFormat)
+		self.callback_isALoadableFileExtension = isALoadableFileExtensionFunc(self.isALoadableFileExtension)
+		if len(args) > 0:
+			self.c_pointer = UserImageLoader_ctor1(self.callback_loadImage, args[0])
+		else:
+			self.c_pointer = UserImageLoader_ctor1(self.callback_loadImage, "")
+	def __del__(self):
+		if self.c_pointer:# and self.delete_c_pointer:
+			try:
+				delete_pointer(self.c_pointer)
+			except:
+				pass
+	def set_extensions(self, ext0, ext1 = '', ext2 = ''):
+		UserImageLoader_set_extensions(self.c_pointer, ext0, ext1, ext2)
+	def set_funcs(self, func0 = None, func1 = None, func2 = None):
+		if func0 is None:
+			func0 = self.callback_loadImage
+		UserImageLoader_set_funcs(self.c_pointer, func0, func1, func2)
+	def isALoadableFileExtension(self, filename):
+		'can be replaced with user class'
+		return IImageLoader_isALoadableFileExtension(self.c_pointer, filename)
+	def isALoadableFileFormat(self, file):
+		'can be replaced with user class'
+		return IImageLoader_isALoadableFileFormat(self.c_pointer, file.c_pointer)
+	def loadImage(self, file):
+		'must be replaced with user class'
+		return IImage(IImageLoader_loadImage(self.c_pointer, file.c_pointer))
+
 class IImageWriter(IReferenceCounted):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = None
@@ -15020,6 +15061,17 @@ if BUILD_WITH_IRR_SVG_AGG:
 		height_u32 = property(get_height_u32)
 		def get_size(self):
 			return vector2du(self.get_width_u32(), self.get_height_u32())
+
+	class svg_agg_loader(UserImageLoader):
+		def __init__(self, *args, **kwargs):
+			#~ self.device = kwargs.pop('device', None)
+			#~ UserImageLoader.__init__(self, *args, **kwargs)
+			#~ self.set_extensions('svg')
+			self.device = args[0]
+			UserImageLoader.__init__(self, 'svg')
+		def loadImage(self, file):
+			svg_image = svg_agg_image(self.device.getVideoDriver(), self.device.getFileSystem(), IReadFile(file).getFileName())
+			return svg_image.get_image(True).c_pointer
 
 if BUILD_WITH_IRR_SVG_CAIRO:
 	class svg_cairo_image(object):

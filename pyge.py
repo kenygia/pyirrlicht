@@ -383,8 +383,11 @@ class framework:
 			#===================Fog=====================
 			self.driver.setFog(start=1.0, end=1000.0)
 			#================SVG IImageLoader=============
-			self.driver.addExternalImageLoader(agg_svg_loader(self.driver))
-			#~ self.driver.addAggSvgImageLoader()
+			if BUILD_WITH_IRR_SVG_AGG:
+				self.driver.addExternalImageLoader(svg_agg_loader(self.device))
+			elif BUILD_WITH_AGG:
+				self.driver.addExternalImageLoader(agg_svg_loader(self.driver))
+				#~ self.driver.addAggSvgImageLoader()
 		self.log_file_stream = None
 
 	def __del__(self):
