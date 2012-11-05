@@ -60,7 +60,6 @@ voidp recti_ctor2(int, int, int, int)
 
 byte IVideoDriver_beginSceneDefault(voidp, byte, byte, voidp)
 byte IVideoDriver_endScene(voidp)
-IVideoDriver_SetIcon(voidp, int, byte)
 voidp IVideoDriver_getScreenSize(voidp)
 IVideoDriver_draw2DImage1(voidp, voidp, voidp)//vd_pointer, texture, position2di
 IVideoDriver_draw2DImage2(voidp, voidp, voidp, voidp, voidp, voidp, byte)//vd_pointer, texture, position2di, sourceRect, clipRect = 0, color, useAlphaChannelOfTexture = false
@@ -69,6 +68,8 @@ IVideoDriver_draw2DRectangle2(voidp, voidp, voidp, voidp, voidp, voidp, voidp)//
 IVideoDriver_draw2DRectangleOutline(voidp, voidp, voidp)//vd_pointer, pos, color
 IVideoDriver_draw2DLine(voidp, voidp, voidp, voidp)//vd_pointer, start, end, color
 IVideoDriver_draw2DPolygon(voidp, voidp, float, voidp, int)//vd_pointer, center, radius, color, vertexCount
+ulong IVideoDriver_GetHandle(voidp)// get window handle
+IVideoDriver_SetIcon(voidp, int, byte)//vd_pointer, int icon_id = 32512, bool big_icon = false
 
 voidp ICursorControl_getPosition(voidp)
 
