@@ -2,8 +2,8 @@
 # http://pir.sourceforge.net
 # BSD license
 
-__version__ = pyirrlicht_version = '1.1.6'
-__versionTime__ = '2012-11-03'
+__version__ = pyirrlicht_version = '1.1.7'
+__versionTime__ = '2012-11-08'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -50,9 +50,9 @@ else:
 #~ PyFile_AsFile.restype = FILE_ptr
 #~ PyFile_AsFile.argtypes = [ctypes.py_object]
 
-#~ c_module = ctypes.CDLL('irrlicht_c_173')
-from os import environ
+#~ c_module_name = 'irrlicht_c_173'
 c_module_name = 'irrlicht_c'
+from os import environ
 if 'IRRLICHT_C_LIBRARY' in environ:
 	c_module_name = environ['IRRLICHT_C_LIBRARY']
 	del environ
@@ -3751,6 +3751,7 @@ IGUITable_getDrawFlags = func_type(ctypes.c_int, ctypes.c_void_p)(('IGUITable_ge
 
 # functions for class ISceneCollisionManager
 ISceneCollisionManager_getCollisionPoint = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneCollisionManager_getCollisionPoint', c_module))
+#~ ISceneCollisionManager_getCollisionPoint1 = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneCollisionManager_getCollisionPoint1', c_module))
 ISceneCollisionManager_getCollisionResultPosition = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_bool, ctypes.c_void_p, ctypes.c_float, ctypes.c_void_p)(('ISceneCollisionManager_getCollisionResultPosition', c_module))
 ISceneCollisionManager_getRayFromScreenCoordinates = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneCollisionManager_getRayFromScreenCoordinates', c_module))
 ISceneCollisionManager_getScreenCoordinatesFrom3DPosition = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('ISceneCollisionManager_getScreenCoordinatesFrom3DPosition', c_module))
@@ -4511,27 +4512,27 @@ tQ3EntityList_set_sorted = func_type(None, ctypes.c_void_p, ctypes.c_bool)(('tQ3
 tQ3EntityList_swap = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('tQ3EntityList_swap', c_module))
 
 # functions for class ITimer
+# EWeekday
+EWD_SUNDAY = 0
+EWD_MONDAY = 1
+EWD_TUESDAY = 2
+EWD_WEDNESDAY = 3
+EWD_THURSDAY = 4
+EWD_FRIDAY = 5
+EWD_SATURDAY = 6
+class RealTimeDate(ctypes.Structure):
+	_fields_ = [('Hour', ctypes.c_int),
+				('Minute', ctypes.c_int),
+				('Second', ctypes.c_int),
+				('Year', ctypes.c_int),
+				('Month', ctypes.c_int),
+				('Day', ctypes.c_int),
+				('Weekday', ctypes.c_int),
+				('Yearday', ctypes.c_uint),
+				('IsDST', ctypes.c_bool)
+				]
 ITimer_getRealTime = func_type(ctypes.c_uint, ctypes.c_void_p)(('ITimer_getRealTime', c_module))
 if IRRLICHT_VERSION >= 180:
-	# EWeekday
-	EWD_SUNDAY = 0
-	EWD_MONDAY = 1
-	EWD_TUESDAY = 2
-	EWD_WEDNESDAY = 3
-	EWD_THURSDAY = 4
-	EWD_FRIDAY = 5
-	EWD_SATURDAY = 6
-	class RealTimeDate(ctypes.Structure):
-		_fields_ = [('Hour', ctypes.c_int),
-					('Minute', ctypes.c_int),
-					('Second', ctypes.c_int),
-					('Year', ctypes.c_int),
-					('Month', ctypes.c_int),
-					('Day', ctypes.c_int),
-					('Weekday', ctypes.c_int),
-					('Yearday', ctypes.c_uint),
-					('IsDST', ctypes.c_bool)
-					]
 	ITimer_getRealTimeAndDate = func_type(ctypes.POINTER(RealTimeDate), ctypes.c_void_p)(('ITimer_getRealTimeAndDate', c_module))
 ITimer_getTime = func_type(ctypes.c_uint, ctypes.c_void_p)(('ITimer_getTime', c_module))
 ITimer_setTime = func_type(None, ctypes.c_void_p, ctypes.c_uint)(('ITimer_setTime', c_module))
@@ -4802,9 +4803,10 @@ SMD3MeshBuffer_set_Tex = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMD
 
 #struct SMD3QuaternionTag
 SMD3QuaternionTag_ctor1 = func_type(ctypes.c_void_p, ctypes.c_char_p)(('SMD3QuaternionTag_ctor1', c_module))
-SMD3QuaternionTag_ctor2 = func_type(ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('SMD3QuaternionTag_ctor2', c_module))
-SMD3QuaternionTag_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_ctor3', c_module))
-SMD3QuaternionTag_ctor4 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_ctor4', c_module))
+SMD3QuaternionTag_ctor2 = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_ctor2', c_module))
+SMD3QuaternionTag_ctor3 = func_type(ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_ctor3', c_module))
+if IRRLICHT_VERSION < 180:
+	SMD3QuaternionTag_ctor4 = func_type(ctypes.c_void_p, ctypes.c_char_p, ctypes.c_void_p)(('SMD3QuaternionTag_ctor4', c_module))
 SMD3QuaternionTag_setto = func_type(None, ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_setto', c_module))
 SMD3QuaternionTag_operator_eq = func_type(ctypes.c_bool, ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_operator_eq', c_module))
 SMD3QuaternionTag_operator_set = func_type(ctypes.c_void_p, ctypes.c_void_p, ctypes.c_void_p)(('SMD3QuaternionTag_operator_set', c_module))
@@ -7415,7 +7417,7 @@ class triangle3df(object):
 	def isTotalOutsideBox(self, box):
 		return triangle3df_isTotalOutsideBox(self.c_pointer, box.c_pointer)
 	def closestPointOnTriangle(self, p):
-		return vector3df(triangle3df_closestPointOnTriangle(self.c_pointer, p.c_pointer))
+		return vector3df(triangle3df_closestPointOnTriangle(self.c_pointer, p.c_pointer), True)
 	def isPointInside(self, p):
 		return triangle3df_isPointInside(self.c_pointer, p.c_pointer)
 	def isPointInsideFast(self, p):
@@ -7427,11 +7429,11 @@ class triangle3df(object):
 	def getIntersectionOfPlaneWithLine(self, linePoint, lineVect, outIntersection):
 		return triangle3df_getIntersectionOfPlaneWithLine(self.c_pointer, linePoint.c_pointer, lineVect.c_pointer, outIntersection.c_pointer)
 	def getNormal(self):
-		return vector3df(triangle3df_getNormal(self.c_pointer))
+		return vector3df(triangle3df_getNormal(self.c_pointer), True)
 	def isFrontFacing(self, lookDirection):
 		return triangle3df_isFrontFacing(self.c_pointer, lookDirection.c_pointer)
 	def getPlane(self):
-		return plane3df(triangle3df_getPlane(self.c_pointer))
+		return plane3df(triangle3df_getPlane(self.c_pointer), True)
 	def getArea(self):
 		return triangle3df_getArea(self.c_pointer)
 	def set(self, a, b, c):
@@ -7482,7 +7484,7 @@ class triangle3di(object):
 	def isTotalOutsideBox(self, box):
 		return triangle3di_isTotalOutsideBox(self.c_pointer, box.c_pointer)
 	def closestPointOnTriangle(self, p):
-		return vector3di(triangle3di_closestPointOnTriangle(self.c_pointer, p.c_pointer))
+		return vector3di(triangle3di_closestPointOnTriangle(self.c_pointer, p.c_pointer), True)
 	def isPointInside(self, p):
 		return triangle3di_isPointInside(self.c_pointer, p.c_pointer)
 	def isPointInsideFast(self, p):
@@ -7494,11 +7496,11 @@ class triangle3di(object):
 	def getIntersectionOfPlaneWithLine(self, linePoint, lineVect, outIntersection):
 		return triangle3di_getIntersectionOfPlaneWithLine(self.c_pointer, linePoint.c_pointer, lineVect.c_pointer, outIntersection.c_pointer)
 	def getNormal(self):
-		return vector3di(triangle3di_getNormal(self.c_pointer))
+		return vector3di(triangle3di_getNormal(self.c_pointer), True)
 	def isFrontFacing(self, lookDirection):
 		return triangle3di_isFrontFacing(self.c_pointer, lookDirection.c_pointer)
 	def getPlane(self):
-		return plane3di(triangle3di_getPlane(self.c_pointer))
+		return plane3di(triangle3di_getPlane(self.c_pointer), True)
 	def getArea(self):
 		return triangle3di_getArea(self.c_pointer)
 	def set(self, a, b, c):
@@ -9068,16 +9070,16 @@ class SMD3QuaternionTag(object):
 		self.delete_c_pointer = True
 		if len(args) == 1:
 			if isinstance(args[0], SMD3QuaternionTag):
-				self.c_pointer = self.ctor4(*args)
+				self.c_pointer = self.ctor3(*args)
 			else:
 				self.c_pointer = self.ctor1(*args)
 		elif len(args) > 1:
 			if isinstance(args[0], vector3df):
-				self.c_pointer = self.ctor3(*args)
-			else:
 				self.c_pointer = self.ctor2(*args)
+			elif IRRLICHT_VERSION < 180:
+				self.c_pointer = self.ctor4(*args)
 		elif 'other' in kwargs:
-			self.c_pointer = self.ctor4(kwargs.pop('other', None))
+			self.c_pointer = self.ctor3(kwargs.pop('other', None))
 		elif 'c_pointer' in kwargs:
 			self.c_pointer = kwargs.pop('c_pointer', None)
 			self.delete_c_pointer = False
@@ -9089,12 +9091,16 @@ class SMD3QuaternionTag(object):
 				pass
 	def ctor1(self, name):
 		return SMD3QuaternionTag_ctor1(name)
-	def ctor2(self, name, m):
-		return SMD3QuaternionTag_ctor2(name, m.c_pointer)
-	def ctor3(self, pos, angle):
-		return SMD3QuaternionTag_ctor3(pos.c_pointer, angle.c_pointer)
-	def ctor4(self, copyMe):
-		return SMD3QuaternionTag_ctor4(copyMe.c_pointer)
+	def ctor2(self, pos, angle):
+		return SMD3QuaternionTag_ctor2(pos.c_pointer, angle.c_pointer)
+	def ctor3(self, copyMe):
+		return SMD3QuaternionTag_ctor3(copyMe.c_pointer)
+	def ctor4(self, name, m):
+		if IRRLICHT_VERSION < 180:
+			return SMD3QuaternionTag_ctor4(name, m.c_pointer)
+		else:
+			print('This version not support name and matrix SMD3QuaternionTag constructor.')
+			return 0
 	def setto(self, m):
 		SMD3QuaternionTag_setto(self.c_pointer, m.c_pointer)
 	def operator_eq(self, other):
@@ -12048,8 +12054,6 @@ class ISceneNode(IAttributeExchangingObject):
 			self.c_pointer = args[0]
 		except:
 			self.c_pointer = None
-	#~ def Destructor(self):
-		#~ ISceneNode_Destructor(self.c_pointer)
 	def OnRegisterSceneNode(self):
 		ISceneNode_OnRegisterSceneNode(self.c_pointer)
 	def OnAnimate(self, timeMs):
@@ -12467,7 +12471,13 @@ class ISceneCollisionManager(IReferenceCounted):
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = args[0]
 	def getCollisionPoint(self, ray, selector, outCollisionPoint, outTriangle, outNode):
-		return ISceneCollisionManager_getCollisionPoint(self.c_pointer, ray.c_pointer, selector.c_pointer, outCollisionPoint.c_pointer, outTriangle.c_pointer, outNode.c_pointer)
+		#~ return ISceneCollisionManager_getCollisionPoint(self.c_pointer, ray.c_pointer, selector.c_pointer, outCollisionPoint.c_pointer, outTriangle.c_pointer, outNode.c_pointer)
+		try:
+			return ISceneCollisionManager_getCollisionPoint(self.c_pointer, ray.c_pointer, selector.c_pointer, outCollisionPoint.c_pointer, outTriangle.c_pointer, outNode.c_pointer)
+		except:
+			return False
+		#~ return ISceneCollisionManager_getCollisionPoint(self.c_pointer, ray.c_pointer, selector.c_pointer, ctypes.byref(ctypes.c_void_p(outCollisionPoint.c_pointer)), ctypes.byref(outTriangle.c_pointer), ctypes.byref(outNode.c_pointer))
+		#~ return ISceneCollisionManager_getCollisionPoint(self.c_pointer, ray.c_pointer, selector.c_pointer, ctypes.addressof(outCollisionPoint.c_pointer), ctypes.addressof(outTriangle.c_pointer), ctypes.addressof(outNode.c_pointer))
 	def getCollisionResultPosition(self, selector, ellipsoidPosition, ellipsoidRadius, ellipsoidDirectionAndSpeed, triout, hitPosition, outFalling, outNode, slidingSpeed = 0.0005, gravityDirectionAndSpeed = vector3df(0.0, 0.0, 0.0)):
 		return vector3df(ISceneCollisionManager_getCollisionResultPosition(self.c_pointer, selector.c_pointer, ellipsoidPosition.c_pointer, ellipsoidRadius.c_pointer, ellipsoidDirectionAndSpeed.c_pointer, triout.c_pointer, hitPosition.c_pointer, outFalling, outNode.c_pointer, slidingSpeed, gravityDirectionAndSpeed.c_pointer))
 	def getRayFromScreenCoordinates(self, pos, camera = ICameraSceneNode(0)):
@@ -13014,7 +13024,7 @@ class IVideoDriver(IReferenceCounted):
 	def getTextureCreationFlag(self, flag):
 		return IVideoDriver_getTextureCreationFlag(self.c_pointer, flag)
 	def createImageFromFile(self, file_or_filename):
-		if isinstance(file_or_filename, str):
+		if isinstance(file_or_filename, (type_str, type_unicode)):
 			return self.createImageFromFile1(file_or_filename)
 		else:
 			return self.createImageFromFile2(file_or_filename)
@@ -14685,11 +14695,20 @@ class IQ3LevelMesh(IAnimatedMesh):
 		return tQ3EntityList(IQ3LevelMesh_getEntityList(self.c_pointer))
 
 class ITimer(IReferenceCounted):
+	if IRRLICHT_VERSION < 180:
+		from time import localtime
 	def __init__(self, *args, **kwargs):
 		self.c_pointer = args[0]
 	def getRealTime(self):
 		return ITimer_getRealTime(self.c_pointer)
-	if IRRLICHT_VERSION >= 180:
+	if IRRLICHT_VERSION < 180:
+		def getRealTimeAndDate(self):
+			t = self.localtime()
+			return RealTimeDate(t.tm_hour, t.tm_min, t.tm_sec, t.tm_year, t.tm_mon, t.tm_mday, t.tm_wday, t.tm_yday, t.tm_isdst)
+		def getRealTimeAndDateAsTuple(self):
+			t = self.localtime()
+			return (t.tm_hour, t.tm_min, t.tm_sec, t.tm_year, t.tm_mon, t.tm_mday, t.tm_wday, t.tm_yday, t.tm_isdst)
+	else:
 		def getRealTimeAndDate(self):
 			return ITimer_getRealTimeAndDate(self.c_pointer)[0]
 		def getRealTimeAndDateAsTuple(self):

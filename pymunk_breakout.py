@@ -7,7 +7,7 @@ width, height = 600,600
 def to_screen(p):
 	"""Small hack to convert pymunk to screen coordinates"""
 	return int(p.x), int(-p.y+height)
-def from_screen(p): 
+def from_screen(p):
 	return to_screen(p)
 
 def draw_lines(video_driver, coords, color, width = 0):
@@ -44,7 +44,7 @@ def setup_level(space, player_body):
 	import random
 	# Remove balls and bricks
 	for s in space.shapes[:]:
-		if s.body not in [player_body]:
+		if not s.body.is_static and s.body not in [player_body]:
 			space.remove(s.body, s)
 
 	# Spawn a ball for the player to have something to play with
@@ -66,41 +66,104 @@ def setup_level(space, player_body):
 	# Make bricks be removed when hit by ball
 	def remove_first(space, arbiter):
 		first_shape = arbiter.shapes[0]
-		space.add_post_step_callback(space.remove, first_shape, first_shape.body)
+		try:
+			space.add_post_step_callback(space.remove, first_shape, first_shape.body)
+		except: pass
 	space.add_collision_handler(2, 0, separate = remove_first)
 
-def draw_space(video_driver, space):
-	# Static shapes (the walls)
-	for line in space.static_shapes:
-		body = line.body
-		pv1 = body.position + line.a.rotated(body.angle)
-		pv2 = body.position + line.b.rotated(body.angle)
-		p1 = to_screen(pv1)
-		p2 = to_screen(pv2)
-		draw_lines(video_driver, [p1,p2], line.color, int(line.radius))
+class SpaceDrawer:
+	space = None
+	video_driver = None
 
-	# Constraints
-	for c in space.constraints:
-		if isinstance(c, pymunk.GrooveJoint):
-			pv1 = c.a.position + c.groove_a
-			pv2 = c.a.position + c.groove_b
+	def __init__(self, space, video_driver):
+		self.space = space
+		self.video_driver = video_driver
+
+	def draw_circle(self, circle):
+		circle_center = circle.body.position + circle.offset
+		p = to_screen(circle_center)
+		r = 0
+		if hasattr(circle, "color"):
+			color = circle.color  
+		elif circle.body.is_static:
+			color = irr.SColor(255, 200, 200, 200)
+			r = 1
 		else:
-			pv1 = c.a.position + c.anchr1
-			pv2 = c.b.position + c.anchr2
+			color = irr.SColor(255, 255, 0, 0)
+		self.video_driver.draw2DPolygon_f(p[0], p[1], circle.radius, color, 20)
+		
+		circle_edge = circle_center + Vec2d(circle.radius, 0).rotated(circle.body.angle)
+		p2 = to_screen(circle_edge)
+		line_r = 3 if circle.radius > 20 else 1
+		draw_lines(self.video_driver, [p, p2], irr.SColor(255, 0, 0, 255), line_r)
+
+	def draw_poly(self, poly):
+		ps = poly.get_points()
+		ps = [to_screen(p) for p in ps]
+		ps += [ps[0]]
+		if hasattr(poly, "color"):
+			color = poly.color  
+		elif poly.body.is_static:
+			color = irr.SColor(255, 200, 200, 200)
+		else:
+			color = irr.SColor(255, 0, 255, 0)
+		draw_lines(self.video_driver, ps, color, 1)
+
+	def draw_segment(self, segment):
+		body = segment.body
+		pv1 = body.position + segment.a.rotated(body.angle)
+		pv2 = body.position + segment.b.rotated(body.angle)
+
 		p1 = to_screen(pv1)
 		p2 = to_screen(pv2)
-		draw_lines(video_driver, [p1,p2], color_darkgray)
 
-	# moving shapes including player
-	for shape in space.shapes:
+		if hasattr(segment, "color"):
+			color = segment.color  
+		elif segment.body.is_static:
+			color = irr.SColor(255, 200, 200, 200)
+		else:
+			color = irr.SColor(255, 0, 0, 255)
+		draw_lines(self.video_driver, [p1, p2], color, max(int(segment.radius),1))
+
+	def draw_constraint(self, constraint):
+		if isinstance(constraint, pymunk.GrooveJoint) and hasattr(constraint, "groove_a"):
+			p1 = to_screen(constraint.a.position + constraint.groove_a)
+			p2 = to_screen(constraint.a.position + constraint.groove_b)
+			draw_lines(self.video_driver, [p1, p2], irr.SColor(255, 100, 100, 100))
+		elif isinstance(constraint, pymunk.PinJoint):
+			p1 = to_screen(constraint.a.position + constraint.anchr1.rotated(constraint.a.angle))
+			p2 = to_screen(constraint.b.position + constraint.anchr2.rotated(constraint.b.angle))
+			draw_lines(self.video_driver, [p1, p2], irr.SColor(255, 100, 100, 100))
+		elif isinstance(constraint, pymunk.GearJoint):
+			p1 = to_screen(constraint.a.position)
+			p2 = to_screen(constraint.a.position)
+			self.video_driver.draw2DPolygon_f(p1[0], p1[1], 3.0, irr.SColor(255, 100, 100, 100))
+			self.video_driver.draw2DPolygon_f(p2[0], p2[1], 3.0, irr.SColor(255, 100, 100, 100))
+		elif hasattr(constraint, "anchr1"):
+			p1 = to_screen(constraint.a.position + constraint.anchr1.rotated(constraint.a.angle))
+			p2 = to_screen(constraint.b.position + constraint.anchr2.rotated(constraint.b.angle))
+			draw_lines(self.video_driver, [p1, p2], irr.SColor(255, 100, 100, 100))
+		else:
+			p1 = to_screen(constraint.a.position)
+			p2 = to_screen(constraint.b.position)
+			draw_lines(self.video_driver, [p1, p2], irr.SColor(255, 100, 100, 100))
+
+	def draw_shape(self, shape):
 		if isinstance(shape, pymunk.Circle):
-			p = to_screen(shape.body.position)
-			video_driver.draw2DPolygon_f(p[0], p[1], int(shape.radius), shape.color, 20)
-		if isinstance(shape, pymunk.Poly):
-			ps = shape.get_points()
-			ps = [to_screen(p) for p in ps]
-			ps += [ps[0]]
-			draw_lines(video_driver, ps, shape.color, 1)
+			self.draw_circle(shape)
+		elif isinstance(shape, pymunk.Segment):
+			self.draw_segment(shape)
+		elif isinstance(shape, pymunk.Poly):
+			self.draw_poly(shape)
+
+	def draw(self):
+		for s in self.space.shapes:
+			if not (hasattr(s, "ignore_draw") and s.ignore_draw):
+				self.draw_shape(s)
+
+		for c in self.space.constraints:
+			if not (hasattr(c, "ignore_draw") and c.ignore_draw):
+				self.draw_constraint(c)
 
 def main():
 	driver_type = 0
@@ -150,7 +213,7 @@ def main():
 			line.color = irr.SColor(255, 200, 200, 200)
 			line.elasticity = 1.0
 
-		space.add_static(static_lines)
+		space.add(static_lines)
 
 		# bottom - a sensor that removes anything touching it
 		bottom = pymunk.Segment(space.static_body, (50, 50), (550, 50), 5)
@@ -162,7 +225,7 @@ def main():
 			space.add_post_step_callback(space.remove, first_shape, first_shape.body)
 			return True
 		space.add_collision_handler(0, 1, begin = remove_first)
-		space.add_static(bottom)
+		space.add(bottom)
 
 		### Player ship
 		player_body = pymunk.Body(500, pymunk.inf)
@@ -226,6 +289,8 @@ def main():
 			if not font:
 				font = gui_environment.getBuiltInFont()
 
+			space_drawer = SpaceDrawer(space, video_driver)
+
 			i_event_receiver = UserIEventReceiver()
 			device.setEventReceiver(i_event_receiver)
 			color_white = irr.SColor(255, 255, 255, 255)
@@ -244,7 +309,7 @@ def main():
 					if video_driver.beginScene(True, True, color_screen):
 
 						### Draw stuff
-						draw_space(video_driver, space)
+						space_drawer.draw()
 
 						### Info
 						font.draw("fps: %d" % video_driver.getFPS(), irr.recti(0, 0, 100, 20), color_white)

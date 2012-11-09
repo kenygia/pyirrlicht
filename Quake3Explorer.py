@@ -346,7 +346,10 @@ def getNoiser():
 
 def dropElement(x):
 	if x:
-		x.remove()
+		try:
+			x.remove()
+		except:
+			pass
 		x = 0
 
 def setTimeFire(t, delta, flags = 0):
@@ -768,7 +771,9 @@ class Q3Player(IAnimationEndCallBack):
 		else:
 			self.animation = ''
 			if self.WeaponNode:
-				self.WeaponNode.setAnimationEndCallback(IAnimationEndCallBack(0))
+				try:
+					self.WeaponNode.setAnimationEndCallback(IAnimationEndCallBack(0))
+				except: pass
 
 	def OnAnimationEnd(self, node):
 		#~ self.Device.getLogger().log('=== OnAnimationEnd %s' % IAnimatedMeshSceneNode(node), ELL_INFORMATION)
@@ -1524,8 +1529,8 @@ class CQuake3EventHandler(IEventReceiver):
 			elif caller == self.gui.Collision and gui_event_type == EGET_CHECKBOX_CHANGED:
 				# set fly through active
 				self.Game.flyTroughState ^= 1
-				self.Player[0].cam().setAnimateTarget(Game.flyTroughState == 0)
-				#~ self.Game.Device.getLogger().log('collision %d\n' % bool(Game.flyTroughState == 0), ELL_INFORMATION)
+				self.Player[0].cam().setAnimateTarget(self.Game.flyTroughState == 0)
+				#~ self.Game.Device.getLogger().log('collision %d\n' % bool(self.Game.flyTroughState == 0), ELL_INFORMATION)
 			elif caller == self.gui.Visible_Map and gui_event_type == EGET_CHECKBOX_CHANGED:
 				v = self.gui.Visible_Map.isChecked()
 				if self.MapParent:
@@ -1689,13 +1694,15 @@ class CQuake3EventHandler(IEventReceiver):
 		end = start + (end * camera.getFarValue())
 		triangle = triangle3df()
 		line = line3df(start, end)
+		#~ hitNode = ISceneNode(ctypes.c_void_p(0))
 		hitNode = ISceneNode(0)
 		
 		if smgr.getSceneCollisionManager().getCollisionPoint(line, self.Meta, end, triangle, hitNode):
-			out = triangle.getNormal()
-			out.setLength(0.03)
+			if triangle:
+				out = triangle.getNormal()
+				out.setLength(0.03)
+				imp.outVector = out
 			imp.when = 1
-			imp.outVector = out
 			imp.pos = end
 			player.setAnim('pow')
 			player.Anim[1].next += player.Anim[1].delta
