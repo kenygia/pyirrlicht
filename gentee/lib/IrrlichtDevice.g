@@ -35,9 +35,47 @@ method byte IrrlichtDevice.createDevice(int deviceType, collection wsize, uint b
 		return false
 	}
 }
+method byte IrrlichtDevice.createDevice(int deviceType, collection wsize, uint bits, byte fullscreen, byte stencilbuffer, byte vsync, IEventReceiver receiver)
+{
+	dimension2du windowSize = wsize
+	this.c_pointer = IrrlichtDevice_createDevice(deviceType, windowSize.c_pointer, bits, fullscreen, stencilbuffer, vsync, receiver.c_pointer)
+	if (this.c_pointer)
+	{
+		return true
+	}
+	else
+	{
+		return false
+	}
+}
 method byte IrrlichtDevice.createDevice(int deviceType, dimension2du windowSize, uint bits, byte fullscreen, byte stencilbuffer, byte vsync, voidp receiver)
 {
 	this.c_pointer = IrrlichtDevice_createDevice(deviceType, windowSize.c_pointer, bits, fullscreen, stencilbuffer, vsync, receiver)
+	if (this.c_pointer)
+	{
+		return true
+	}
+	else
+	{
+		return false
+	}
+}
+method byte IrrlichtDevice.createDevice(int deviceType, dimension2du windowSize, uint bits, byte fullscreen, byte stencilbuffer, byte vsync, IEventReceiver receiver)
+{
+	this.c_pointer = IrrlichtDevice_createDevice(deviceType, windowSize.c_pointer, bits, fullscreen, stencilbuffer, vsync, receiver.c_pointer)
+	if (this.c_pointer)
+	{
+		return true
+	}
+	else
+	{
+		return false
+	}
+}
+method byte IrrlichtDevice.createDevice2(int deviceType, collection wsize, uint bits, byte fullscreen, byte stencilbuffer, byte vsync, byte create_receiver)
+{
+	dimension2du windowSize = wsize
+	this.c_pointer = IrrlichtDevice_createDevice2(deviceType, windowSize.c_pointer, bits, fullscreen, stencilbuffer, vsync, create_receiver)
 	if (this.c_pointer)
 	{
 		return true
