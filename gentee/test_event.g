@@ -10,11 +10,15 @@ include { "lib//irrlicht.g" }
 type user_event_receiver <inherit = IEventReceiver>
 {
 }
+//~ extern
+//~ {
+	//~ method byte user_event_receiver.OnEvent(voidp event)
+//~ }
 //~ method byte user_event_receiver.OnEvent(SEvent event)
 method byte user_event_receiver.OnEvent(voidp event)
 {
 	//~ print("OnEvent SEvent.GetEventType \(event.GetEventType())\n")
-	//~ print("OnEvent SEvent.GetEventType \(SEvent_GetEventType(event))\n")
+	print("child OnEvent SEvent_GetEventType \(SEvent_GetEventType(event))\n")
 	return false
 }
 
@@ -25,6 +29,7 @@ func test <main>()
 	if(device.createDevice(EDT_SOFTWARE, %{320, 240}, 16, false, false, false, receiver))
 	{
 		print("Irrlicht version \(device.getVersion())\n")
+		device.setResizable(true)
 		IVideoDriver video_driver = device.getVideoDriver()
 		SColor color_background = %{255, 100, 100, 155}
 		while(device.run())

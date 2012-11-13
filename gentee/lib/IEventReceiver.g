@@ -34,7 +34,7 @@ import "irrlicht_c.dll" <cdeclare>
 	byte SJoystickEvent_IsButtonPressed(voidp)
 
 	voidp SEvent_GetSLogEvent(voidp)
-	uint SLogEvent_GetText(voidp)
+	voidp SLogEvent_GetText(voidp)
 	int SLogEvent_GetLevel(voidp)
 
 	voidp SEvent_GetSUserEvent(voidp)
@@ -46,25 +46,33 @@ import "irrlicht_c.dll" <cdeclare>
 	IEventReceiver_set_func_event(voidp, voidp)
 }
 
-type SEvent { voidp c_pointer }
-operator SEvent =(SEvent self, voidp ptr)
+type base_event { voidp c_pointer }
+operator base_event =(base_event self, voidp ptr)
 {
 	self.c_pointer = ptr
 	return self
 }
+
+type SLogEvent <inherit = base_event> :
+method int SLogEvent.GetLevel() : return SLogEvent_GetLevel(this.c_pointer)
+method str SLogEvent.GetText <result>() : result.copy(SLogEvent_GetText(this.c_pointer))
+
+type SEvent <inherit = base_event> :
 method int SEvent.GetEventType() : return SEvent_GetEventType(this.c_pointer)
+method SLogEvent SEvent.GetSLogEvent <result>() : result = SEvent_GetSLogEvent(this.c_pointer)
+property SLogEvent SEvent.LogEvent <result> : result = SEvent_GetSLogEvent(this.c_pointer)
 
 type IEventReceiver <inherit = IReferenceCounted>
 {
 	voidp func_event
 	byte delete_c_pointer
 }
-extern
-{
-	method IEventReceiver.set_func_event(voidp func_event)
-	//~ method byte IEventReceiver.OnEvent(SEvent event)
-	method byte IEventReceiver.OnEvent(voidp event)
-}
+//~ extern
+//~ {
+	//~ method IEventReceiver.set_func_event(voidp func_event)
+	//~ //method byte IEventReceiver.OnEvent(SEvent event)
+	//~ method byte IEventReceiver.OnEvent(voidp event)
+//~ }
 
 operator IEventReceiver =(IEventReceiver self, voidp ptr)
 {
@@ -77,8 +85,27 @@ operator IEventReceiver =(IEventReceiver self, voidp ptr)
 method IEventReceiver.init()
 {
 	//~ this.func_event = callback(&(this.OnEvent), 2, $CB_CDECL)//The count of parameters is wrong in the function '@OnEvent'
-	//~ this.c_pointer = IEventReceiver_ctor2(this.func_event)
-	//~ this.delete_c_pointer = true
+	//~ uint idevent = getid("@OnEvent", $GETID_METHOD, %{IEventReceiver, SEvent})
+	uint idevent = getid("@OnEvent", $GETID_METHOD, %{IEventReceiver, voidp})
+	print("=== @OnEvent idevent = \(idevent)\n")
+	if idevent
+	{
+		this.func_event = callback(idevent, 2, $CB_CDECL)
+	}
+	else
+	{
+		uint idevent = getid("OnEvent", $GETID_METHOD, %{IEventReceiver, voidp})
+		print("=== OnEvent idevent = \(idevent)\n")
+		if idevent
+		{
+			this.func_event = callback(idevent, 2, $CB_CDECL)
+		}
+	}
+	if this.func_event
+	{
+		this.c_pointer = IEventReceiver_ctor2(this.func_event)
+		this.delete_c_pointer = true
+	}
 }
 
 method IEventReceiver.delete()
@@ -98,5 +125,10 @@ method IEventReceiver.set_func_event(voidp func_event)
 method byte IEventReceiver.OnEvent(voidp event)
 {
 	// must be replaced with user IEventReceiver object
+	print("parent OnEvent SEvent_GetEventType \(SEvent_GetEventType(event))\n")
+	//~ voidp log_event = SEvent_GetSLogEvent(event)
+	//~ ustr log_text
+	//~ log_text.copy(SLogEvent_GetText(log_event))
+	//~ print("Log = \(log_text.str())\n")
 	return false
 }
