@@ -2,8 +2,8 @@
 # http://pir.sourceforge.net
 # BSD license
 
-__version__ = pyirrlicht_version = '1.1.7'
-__versionTime__ = '2012-11-08'
+__version__ = pyirrlicht_version = '1.1.8'
+__versionTime__ = '2012-11-16'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -5726,18 +5726,12 @@ class vector2df(object):
 			return vector2df(vector2df_operator_set_add_other(self.c_pointer, value.c_pointer))
 	def __sub__(self, value):
 		if isinstance(value, float):
-			return vector2df(vector2df_operator_sub_value(self.c_pointer, value))
+			vector2df_operator_sub_value(self.c_pointer, value)
 		elif isinstance(value, dimension2df):
-			return vector2df(vector2df_operator_sub_dimension2d(self.c_pointer, value.c_pointer))
+			vector2df_operator_sub_dimension2d(self.c_pointer, value.c_pointer)
 		else:
-			return vector2df(vector2df_operator_sub_other(self.c_pointer, value.c_pointer))
-	def __sub__(self, value):
-		if isinstance(value, float):
-			return vector2df((self.c_pointer, value))
-		elif isinstance(value, dimension2df):
-			return vector2df((self.c_pointer, value.c_pointer))
-		else:
-			return vector2df((self.c_pointer, value.c_pointer))
+			vector2df_operator_sub_other(self.c_pointer, value.c_pointer)
+		return self
 	def __isub__(self, value):
 		if isinstance(value, float):
 			return vector2df(vector2df_operator_set_sub_value(self.c_pointer, value))
@@ -5882,18 +5876,12 @@ class vector2di(object):
 			return vector2di(vector2di_operator_set_add_other(self.c_pointer, value.c_pointer))
 	def __sub__(self, value):
 		if isinstance(value, int):
-			return vector2di(vector2di_operator_sub_value(self.c_pointer, value))
+			vector2di_operator_sub_value(self.c_pointer, value)
 		elif isinstance(value, dimension2di):
-			return vector2di(vector2di_operator_sub_dimension2d(self.c_pointer, value.c_pointer))
+			vector2di_operator_sub_dimension2d(self.c_pointer, value.c_pointer)
 		else:
-			return vector2di(vector2di_operator_sub_other(self.c_pointer, value.c_pointer))
-	def __sub__(self, value):
-		if isinstance(value, int):
-			return vector2di((self.c_pointer, value))
-		elif isinstance(value, dimension2di):
-			return vector2di((self.c_pointer, value.c_pointer))
-		else:
-			return vector2di((self.c_pointer, value.c_pointer))
+			vector2di_operator_sub_other(self.c_pointer, value.c_pointer)
+		return self
 	def __isub__(self, value):
 		if isinstance(value, int):
 			return vector2di(vector2di_operator_set_sub_value(self.c_pointer, value))
