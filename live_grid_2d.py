@@ -7,15 +7,15 @@ class live_grid_2d:
 		try:
 			self.cellw = args[2]
 		except:
-			self.cellw = 50
+			self.cellw = 32
 		if 'cellw' in kwargs:
-			self.cellw = kwargs.pop('cellw', 50)
+			self.cellw = kwargs.pop('cellw', 32)
 		try:
 			self.cellh = args[3]
 		except:
-			self.cellh = 50
+			self.cellh = 32
 		if 'cellh' in kwargs:
-			self.cellh = kwargs.pop('cellh', 50)
+			self.cellh = kwargs.pop('cellh', 32)
 		try:
 			self.color_line = args[4]
 		except:
@@ -29,23 +29,41 @@ class live_grid_2d:
 		if 'color_active_cell' in kwargs:
 			self.color_active_cell = kwargs.pop('color_active_cell', SColor(128, 150, 150, 255))
 		try:
-			self.width_line = args[5]
+			self.color_points = args[5]
+		except:
+			self.color_points = SColor(255, 255, 255, 255)
+		if 'color_points' in kwargs:
+			self.color_points = kwargs.pop('color_points', SColor(255, 255, 255, 255))
+		try:
+			self.width_line = args[6]
 		except:
 			self.width_line = 3
 		if 'width_line' in kwargs:
 			self.width_line = kwargs.pop('width_line', 3)
-		try:
-			self.is_draw_lines = args[6]
-		except:
-			self.is_draw_lines = True
-		if 'is_draw_lines' in kwargs:
-			self.is_draw_lines = kwargs.pop('is_draw_lines', True)
 		try:
 			self.size_clip = args[7]
 		except:
 			self.size_clip = 0
 		if 'size_clip' in kwargs:
 			self.size_clip = kwargs.pop('size_clip', 0)
+		try:
+			self.size_point = args[8]
+		except:
+			self.size_point = 3.0
+		if 'size_point' in kwargs:
+			self.size_point = kwargs.pop('size_point', 3.0)
+		try:
+			self.is_draw_lines = args[9]
+		except:
+			self.is_draw_lines = True
+		if 'is_draw_lines' in kwargs:
+			self.is_draw_lines = kwargs.pop('is_draw_lines', True)
+		try:
+			self.is_draw_points = args[10]
+		except:
+			self.is_draw_points = True
+		if 'is_draw_points' in kwargs:
+			self.is_draw_points = kwargs.pop('is_draw_points', True)
 		self.screen_size = dimension2du(self.video_driver.getScreenSize())
 		self.create_cells()
 		self.create_lines()
@@ -99,8 +117,20 @@ class live_grid_2d:
 			self.video_driver.draw2DRectangle(self.color_active_cell, self.get_current_cell())
 
 	def draw_lines(self):
-		for point1, point2 in self.lines:
-			self.video_driver.draw2DLineW(point1, point2, self.color_line, self.width_line)
+		if self.width_line:
+			for point1, point2 in self.lines:
+				self.video_driver.draw2DLineW(point1, point2, self.color_line, self.width_line)
+		else:
+			for point1, point2 in self.lines:
+				self.video_driver.draw2DLine(point1, point2, self.color_line)
+
+	def draw_points(self):
+		if self.size_point:
+			for rect in self.cells:
+				self.video_driver.draw2DPolygon(rect.UpperLeftCorner, self.size_point, self.color_points)
+		else:
+			for rect in self.cells:
+				self.video_driver.drawPixel(rect.UpperLeftCorner.X, rect.UpperLeftCorner.Y, self.color_points)
 
 	def draw(self):
 		if self.screen_size != self.video_driver.getScreenSize():
@@ -111,6 +141,8 @@ class live_grid_2d:
 		self.draw_current_cell()
 		if self.is_draw_lines:
 			self.draw_lines()
+		if self.is_draw_points:
+			self.draw_points()
 
 def test():
 	device = createDevice(EDT_BURNINGSVIDEO, dimension2du(320, 240))
@@ -120,7 +152,7 @@ def test():
 		video_driver = device.getVideoDriver()
 		cursor_control = device.getCursorControl()
 		color_background = SColor(255, 100, 100, 150)
-		grid = live_grid_2d(video_driver, cursor_control)
+		grid = live_grid_2d(video_driver, cursor_control, width_line = 3, size_point = 4.0)#, is_draw_lines = False)
 		screen_size = video_driver.getScreenSize()
 		while device.run():
 			if device.isWindowActive():

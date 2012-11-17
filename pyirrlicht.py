@@ -2,8 +2,8 @@
 # http://pir.sourceforge.net
 # BSD license
 
-__version__ = pyirrlicht_version = '1.1.8'
-__versionTime__ = '2012-11-16'
+__version__ = pyirrlicht_version = '1.1.9'
+__versionTime__ = '2012-11-17'
 __author__ = 'Maxim Kolosov'
 __author_email__ = 'pyirrlicht@gmail.com'
 __doc__ = '''
@@ -12947,7 +12947,7 @@ class IVideoDriver(IReferenceCounted):
 	def draw2DLineWf(self, start_x, start_y, end_x, end_y, color=SColor(255,255,255,255), width = 0):
 		IVideoDriver_draw2DLineWf(self.c_pointer, start_x, start_y, end_x, end_y, color.c_pointer, width)
 	def drawPixel(self, x, y, color):
-		IVideoDriver_drawPixel(self.c_pointer, x, y, color)
+		IVideoDriver_drawPixel(self.c_pointer, x, y, color.c_pointer)
 	def drawPixel_f(self, x, y, color):
 		IVideoDriver_drawPixel_f(self.c_pointer, x, y, color.c_pointer)
 	def draw2DPolygon(self, center, radius, color=SColor(100,255,255,255), vertexCount=10):
