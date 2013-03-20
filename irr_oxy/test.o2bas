@@ -1,0 +1,36 @@
+$ exe
+$ FileName "test.exe"
+include "/OxygenBasic/inc/RTL32.inc"
+
+#include "irrlicht.inc"
+
+dim as LPVOID window_size = dimension2du_ctor2(320, 240)
+
+dim as LPVOID device = IrrlichtDevice_createDevice(EDT_SOFTWARE, window_size, 16, false, false, false, NULL)
+IrrlichtDevice_setWindowCaption(device, "Irrlicht test window " + IrrlichtDevice_getVersion(device))
+IrrlichtDevice_setResizable(device, true)
+
+dim as LPVOID video_driver = IrrlichtDevice_getVideoDriver(device)
+IVideoDriver_SetIcon(video_driver, 32512, false)
+
+dim as LPVOID scolor = SColor_ctor2(255, 100, 100, 140)
+
+dim as LPVOID svg = svg_agg_image_ctor1(video_driver, IrrlichtDevice_getFileSystem(device), "cat.svg", true, 0, ECF_A8R8G8B8, 4)
+svg_agg_image_scale_rateably(svg, 0.5)
+dim as LPVOID texture = svg_agg_image_get_texture(svg, false, false)
+
+dim as LPVOID cursor = IrrlichtDevice_getCursorControl(device)
+
+While IrrlichtDevice_run(device)
+	If IrrlichtDevice_isWindowActive(device) Then
+		If IVideoDriver_beginSceneDefault(video_driver, true, true, scolor) Then
+			IVideoDriver_draw2DImage2(video_driver, texture, ICursorControl_getPosition(cursor), 0, 0, scolor, true)
+			IVideoDriver_endScene(video_driver)
+		End If
+		IrrlichtDevice_sleep(device, 10, false)
+	Else
+		IrrlichtDevice_yield(device)
+	End If
+Wend
+
+IrrlichtDevice_closeDevice(device)
