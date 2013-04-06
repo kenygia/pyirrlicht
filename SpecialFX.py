@@ -13,8 +13,8 @@ driverType = EDT_DIRECT3D9
 
 def main():
 	#~ print("Please press 'y' if you want to use realtime shadows.")
-	#~ shadows = True
-	shadows = False
+	shadows = True
+	#~ shadows = False
 
 	if driverType == EDT_COUNT:
 		return 1
@@ -79,8 +79,8 @@ def main():
 		n.setPosition(vector3df(-120,50,40))
 
 		textures = array(ITexture)
-		#~ for g in range(1, 8):
-			#~ textures.push_front(driver.getTexture('media/portal%d.bmp' % g))
+		#for g in range(1, 8):
+		#	textures.push_front(driver.getTexture('media/portal%d.bmp' % g))
 		for g in range(7, 0, -1):
 			textures.push_back(driver.getTexture('media/portal%d.bmp' % g))
 

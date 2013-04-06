@@ -101,9 +101,11 @@ IRRLICHT_C_API void SMD3MeshBuffer_set_Tex(SMD3MeshBuffer* pointer, core::array<
 
 //struct SMD3QuaternionTag
 IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_ctor1(const c8* name){return new SMD3QuaternionTag(core::stringc(name));}
-IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_ctor2(const c8* name, const core::matrix4* m){return new SMD3QuaternionTag(core::stringc(name), *m);}
-IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_ctor3(const core::vector3df* pos, const core::vector3df* angle){return new SMD3QuaternionTag(*pos, *angle);}
-IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_ctor4(const SMD3QuaternionTag* copyMe){return new SMD3QuaternionTag(*copyMe);}
+IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_ctor2(const core::vector3df* pos, const core::vector3df* angle){return new SMD3QuaternionTag(*pos, *angle);}
+IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_ctor3(const SMD3QuaternionTag* copyMe){return new SMD3QuaternionTag(*copyMe);}
+#if (IRRLICHT_VERSION_MAJOR >= 1 && IRRLICHT_VERSION_MINOR < 8)
+IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_ctor4(const c8* name, const core::matrix4* m){return new SMD3QuaternionTag(core::stringc(name), *m);}
+#endif
 IRRLICHT_C_API void SMD3QuaternionTag_setto(SMD3QuaternionTag* pointer, core::matrix4* m){pointer->setto(*m);}
 IRRLICHT_C_API const bool SMD3QuaternionTag_operator_eq(SMD3QuaternionTag* pointer, const SMD3QuaternionTag* other){return pointer->operator==(*other);}
 IRRLICHT_C_API SMD3QuaternionTag* SMD3QuaternionTag_operator_set(SMD3QuaternionTag* pointer, const SMD3QuaternionTag* copyMe){return &pointer->operator=(*copyMe);}
